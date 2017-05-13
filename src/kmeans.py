@@ -9,7 +9,7 @@ sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 # data features
 customer_data = []
-with open('customers.csv', 'r') as f:
+with open('../data/customers.csv', 'r') as f:
 	data = csv.reader(f)
 	for d in data:
 		customer_data.append(d)
