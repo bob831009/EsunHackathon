@@ -2,6 +2,7 @@ import tensorflow as tf
 import csv
 import random
 import numpy as np
+import json
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.1)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
@@ -63,14 +64,15 @@ for i in range(num_clusters):
 	cluster_tmp = dict()
 	cluster_tmp['cluster_id'] = i
 	cluster_tmp['user_ids'] = []
-	cluster_tmp['scores'] = [0.000 for j in range(num_prod_clusters)]
+	cluster_tmp['scores'] = [0. for j in range(num_prod_clusters)]
 	user_clusters.append(cluster_tmp)
 
 # k-means
 #vectors = tf.constant(init_users)
-random_indices = tf.random_shuffle(tf.range(0, num_vectors))
-centroid_indices = tf.slice(random_indices, [0,], [num_clusters,])
-init_centroids = tf.Variable(tf.gather(data_vectors, centroid_indices))
+#random_indices = tf.random_shuffle(tf.range(0, num_vectors))
+#centroid_indices = tf.slice(random_indices, [0,], [num_clusters,])
+#init_centroids = tf.Variable(tf.gather(data_vectors, centroid_indices))
+init_centroids = tf.Variable(init_users[:num_clusters])
 
 centroids = tf.placeholder('float32', [num_clusters, num_dims])
 vectors = tf.placeholder('float32', [None, num_dims])
@@ -117,5 +119,18 @@ for i in range(len(assignment_values)):
 	user_data[init_n + i]['cluster_id'] = assignment_values[i]
 	user_clusters[assignment_values[i]]['user_ids'].append(init_n + i)
 
-#print user_data[:5]
-#print user_clusters[0]['scores'], len(user_clusters[0]['user_ids'])
+#print user_data[100000]
+for i in range(num_clusters):
+	print user_clusters[i]['scores'], len(user_clusters[i]['user_ids'])
+
+with open('user_data.txt', 'w') as f_user:
+	#json.dumps(user_data, f_user)
+	for user in user_data:
+		f_user.write(str(user))
+
+with open('user_clusters.txt', 'w') as f_cluster:
+	#json.dumps(user_clusters, f_cluster)
+	for cluster in user_clusters:
+		f_cluster.write(str(cluster))
+
+
