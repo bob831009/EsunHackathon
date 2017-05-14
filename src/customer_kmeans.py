@@ -143,12 +143,12 @@ def createCustomerData():
 		#	f_cluster.write(str(cluster))
 
 def getUserData():
-	if (not os.path.exist(userFile)):
+	if (not os.path.exists(userFile)):
 		createCustomerData()
 	return readPickle(userFile)
 
 def getUserClusterData():
-	if (not os.path.exist(clusterFile)):
+	if (not os.path.exists(clusterFile)):
 		createCustomerData()
 	return readPickle(clusterFile)
 
