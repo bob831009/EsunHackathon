@@ -130,13 +130,13 @@ def createCustomerData():
 	for i in range(num_clusters):
 		print user_clusters[i]['scores'], len(user_clusters[i]['user_ids'])
 
-	with open('user_data.pkl', 'w') as f_user:
+	with open(userFile, 'w') as f_user:
 		pickle.dump(user_data, f_user)
 		#json.dump(user_data, f_user)
 		#for user in user_data:
 		#	f_user.write(str(user))
 
-	with open('user_clusters.pkl', 'w') as f_cluster:
+	with open(clusterFile, 'w') as f_cluster:
 		pickle.dump(user_clusters, f_cluster)
 		#json.dump(user_clusters, f_cluster)
 		#for cluster in user_clusters:
