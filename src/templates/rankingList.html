@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div class="container">    
+    <div class="list-group">
+    {% for key, product in products.iteritems() %}
+      <div class='list-group-item'>
+        <div class="form-inline row">
+          <!-- <label class="sr-only" for="inlineFormInput">Name</label> -->
+          <!-- <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Jane Doe"> -->
+          <div class="col-md-4" style="border-color: black;border-style: solid;">
+            <a href="#"> {{ product['prod_name'] }} </a>
+          </div>
+          <label class="sr-only" for="inlineFormInputGroup">Username</label>
+          <div class="input-group col-md-4" style="border-color: black;border-style: solid;">
+            <div class="input-group-addon">@</div>
+            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Username">
+          </div>
+
+          <div class="form-check col-md-4" style="border-color: black;border-style: solid;">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" onclick="window.location='{{ url_for('.productRank', isRefresh='no', productDict=products, listIdx=key) }}';"> Remember me
+              
+            </label>
+          </div>
+
+          <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+</body>
+</html>
+
+
+
+
+
