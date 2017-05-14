@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, url_for, redirect, session
 from flask_bootstrap import Bootstrap
 from flask_appconfig import AppConfig
 
-from register_form import RegisterForm
+from custom_form import RegisterForm, LoginForm
 
 import json
 import os
@@ -27,12 +27,21 @@ def create_app(configfile=None):
 	@app.route('/register', methods=('GET', 'POST'))
 	def register():
 		form = RegisterForm()
-		print (request.method)
 		if request.method == 'POST' and form.validate_on_submit():
 			# print ('valite on submit = ' + str())
+			
+
 			session['isLogin'] = json.dumps(request.form)
 			return redirect(url_for('.mainPage'))
 		return render_template('register.html', form=form)
+
+	@app.route('/login', methods=('GET', 'POST'))
+	def login():
+		form = LoginForm()
+		if request.method == 'POST' and form.validate_on_submit():
+			session['isLogin'] = json.dumps(request.form)
+			return redirect(url_for('.mainPage'))
+		return render_template('login.html', form=form)
 
 	@app.route('/')
 	def mainPage():

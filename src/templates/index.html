@@ -37,13 +37,15 @@ Released   : 20140309
 				<li class="current_page_item"><a href="#" accesskey="1" title="">Homepage</a></li>
 				{% if data['isLogin'] %}
 				<li><a href="#" accesskey="2" title="">Personnel Status</a></li>
+				{% else %}
+				<li><a href="{{ url_for('.register') }}" accesskey="2" title="">Sign up</a></li>
 				{% endif %}
 				<li><a href="#" accesskey="3" title="">About Us</a></li>
 				<li><a href="#" accesskey="4" title="">Careers</a></li>
 				{% if data['isLogin'] %}
 				<li><a href="{{ url_for('.logout') }}" accesskey="5" title="">Sign out</a></li>
 				{% else %}
-				<li><a href="{{ url_for('.register') }}" accesskey="5" title="">Sign in</a></li>
+				<li><a href="{{ url_for('.login') }}" accesskey="5" title="">Sign in</a></li>
 				{% endif %}
 			</ul>
 		</div>
