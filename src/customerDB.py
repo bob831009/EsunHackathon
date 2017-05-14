@@ -23,7 +23,7 @@ def createDB():
 		username = nameList[i % 4275].split(' ')[0].lower() + str(i / 4275 + 1)
 		password = '123'
 		email = username + '@gmail.com'
-		customerID = int(infoList[i][0])
+		customerID = int(infoList[i][0]) - 1
 		feature = infoList[i][1:]
 		username2customerID[username] = customerID
 		customerData[i] = [customerID, username, password, email, feature]

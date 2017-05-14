@@ -144,11 +144,14 @@ def createCustomerData():
 
 def getUserData():
 	if (not os.path.exists(userFile)):
+		print('[INFO]:getUserData --> create user_data.pkl')
+		
 		createCustomerData()
 	return readPickle(userFile)
 
 def getUserClusterData():
 	if (not os.path.exists(clusterFile)):
+		print('[INFO]:getUserClusterData --> create user_clusters.pkl')
 		createCustomerData()
 	return readPickle(clusterFile)
 
