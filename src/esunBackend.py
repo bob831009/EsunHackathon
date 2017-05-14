@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from flask import Flask, render_template, request, url_for, redirect, session
+from flask import Flask, render_template, request, url_for, redirect, session, flash
 from flask_bootstrap import Bootstrap
 from flask_appconfig import AppConfig
 
@@ -37,7 +37,11 @@ def create_app(configfile=None):
 				return redirect(url_for('.register'))
 
 			session['isLogin'] = json.dumps(request.form)
-			return redirect(url_for('.mainPage'))
+			if request.args['fromUrl'] == 'hotIssue':
+				return redirect(url_for('.hotIssue'))
+			else:	
+				return redirect(url_for('.mainPage'))
+			
 		return render_template('register.html', form=form)
 
 	@app.route('/login', methods=('GET', 'POST'))
@@ -50,7 +54,13 @@ def create_app(configfile=None):
 			if username in username2customerID and password == customerDB[username2customerID[username] - 1][2]:
 				print('[INFO]:login --> username ( ' + form.username.data + ' ) confirmed')
 				session['isLogin'] = json.dumps(request.form)
-			return redirect(url_for('.mainPage'))
+			
+				# return redirect(url_for('.mainPage'))
+			if request.args['fromUrl'] == 'hotIssue':
+				return redirect(url_for('.hotIssue'))
+			else:	
+				return redirect(url_for('.mainPage'))
+
 		return render_template('login.html', form=form)
 
 	@app.route('/')
@@ -69,11 +79,31 @@ def create_app(configfile=None):
 			print(form)
 			return render_template('index.html', data=data)
 	
+	@app.route('/hotissue')
+	def hotIssue():
+		data = {}
+		if 'isLogin' not in session:
+			data['isLogin'] = False
+			print('[INFO]:hotIssue --> not login')
+			return render_template('hotissue.html', data=data)
+		else:
+			data['isLogin'] = True
+			# print('[INFO]:hotIssue --> login : ', end=' ')
+			# print(form)			
+			return render_template('hotissue.html', data=data)
+	
+
 	@app.route('/logout')
 	def logout():
+		print("GEGEGEG")
+		print(request.args['fromUrl'])
 		session.pop('isLogin', None)
-		return redirect(url_for('.mainPage'))
+		if request.args['fromUrl'] == 'hotIssue':
+			return redirect(url_for('.hotIssue'))
+		else:	
+			return redirect(url_for('.mainPage'))
 	return app
+
 
 if __name__ == '__main__':
 	create_app().run(debug=True)

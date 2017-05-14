@@ -43,7 +43,5 @@ def getUsername2CustomerIdx():
 		createDB()
 	return readPickle(foutMap)	
 
-
-
 if __name__ == '__main__':
 	createDB()

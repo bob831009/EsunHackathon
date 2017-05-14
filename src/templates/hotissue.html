@@ -17,8 +17,9 @@ Released   : 20140309
 <meta name="keywords" content="" />
 <meta name="description" content="" />
 <link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
-<link href="default.css" rel="stylesheet" type="text/css" media="all" />
-<link href="fonts.css" rel="stylesheet" type="text/css" media="all" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheet/default.css') }}" media="all">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheet/fonts.css') }}" media="all">
+	
 
 <!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
 
@@ -32,18 +33,18 @@ Released   : 20140309
 		</div>
 		<div id="menu">
 			<ul>
-				<li class="current_page_item"><a href="#" accesskey="1" title="">Homepage</a></li>
+				<li class="current_page_item"><a href="{{ url_for('.mainPage') }}" accesskey="1" title="">Homepage</a></li>
 				{% if data['isLogin'] %}
 				<li><a href="#" accesskey="2" title="">Personnel Status</a></li>
 				{% else %}
-				<li><a href="{{ url_for('.register') }}" accesskey="2" title="">Sign up</a></li>
+				<li><a href="{{ url_for('.register', fromUrl='hotIssue') }}" accesskey="2" title="">Sign up</a></li>
 				{% endif %}
 				<li><a href="#" accesskey="3" title="">About Us</a></li>
 				<li><a href="#" accesskey="4" title="">Careers</a></li>
 				{% if data['isLogin'] %}
-				<li><a href="{{ url_for('.logout') }}" accesskey="5" title="">Sign out</a></li>
+				<li><a href="{{ url_for('.logout', fromUrl='hotIssue') }}" accesskey="5" title="">Sign out</a></li>
 				{% else %}
-				<li><a href="{{ url_for('.login') }}" accesskey="5" title="">Sign in</a></li>
+				<li><a href="{{ url_for('.login', fromUrl='hotIssue') }}" accesskey="5" title="">Sign in</a></li>
 				{% endif %}
 			</ul>
 		</div>

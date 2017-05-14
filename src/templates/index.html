@@ -34,18 +34,18 @@ Released   : 20140309
 		</div>
 		<div id="menu">	
 			<ul>
-				<li class="current_page_item"><a href="#" accesskey="1" title="">Homepage</a></li>
+				<li class="current_page_item"><a href="{{ url_for('.mainPage') }}" accesskey="1" title="">Homepage</a></li>
 				{% if data['isLogin'] %}
 				<li><a href="#" accesskey="2" title="">Personnel Status</a></li>
 				{% else %}
-				<li><a href="{{ url_for('.register') }}" accesskey="2" title="">Sign up</a></li>
+				<li><a href="{{ url_for('.register', fromUrl='mainPage') }}" accesskey="2" title="">Sign up</a></li>
 				{% endif %}
 				<li><a href="#" accesskey="3" title="">About Us</a></li>
 				<li><a href="#" accesskey="4" title="">Careers</a></li>
 				{% if data['isLogin'] %}
-				<li><a href="{{ url_for('.logout') }}" accesskey="5" title="">Sign out</a></li>
+				<li><a href="{{ url_for('.logout', fromUrl='mainPage') }}" accesskey="5" title="">Sign out</a></li>
 				{% else %}
-				<li><a href="{{ url_for('.login') }}" accesskey="5" title="">Sign in</a></li>
+				<li><a href="{{ url_for('.login', fromUrl='mainPage') }}" accesskey="5" title="">Sign in</a></li>
 				{% endif %}
 			</ul>
 		</div>
@@ -57,7 +57,7 @@ Released   : 20140309
 			<h2>Praesent scelerisquet</h2>
 			<span class="byline">Donec leo, vivamus fermentum nibh in augue praesent a lacus at urna congue</span> </div>
 		<div id="three-column">
-			<div class="boxA">
+			<div class="boxA" onclick="window.location='{{ url_for('.hotIssue', data=data) }}';">
 				<div class="box"> <span class="fa fa-cloud-download"></span>
 					<p>Praesent pellentesque facilisis elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra.</p>
 				</div>
