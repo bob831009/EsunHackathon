@@ -186,7 +186,7 @@ ca	ul.actions
 	{
 		display: inline-block;
 		padding: 0em 3em;
-		background: #009E2D;
+		background: #00AAAA;
 		letter-spacing: 0.20em;
 		line-height: 4em;
 		text-decoration: none;
@@ -381,7 +381,7 @@ ca	ul.actions
 	
 	#menu .current_page_item a
 	{
-		background: #009E2D;
+		background: #00AAAA;
 		color: #FFF;
 	}
 	
@@ -422,7 +422,7 @@ ca	ul.actions
 	#banner .button
 	{
 		margin-top: 3em;
-		background: #009E2D !important;
+		background: #00AAAA !important;
 	}
 
 /*********************************************************************************/
@@ -498,7 +498,7 @@ ca	ul.actions
 	{
 		overflow: hidden;
 		padding: 5em 0em;
-		background: #009E2D;
+		background: #00AAAA;
 		color: rgba(255,255,255,.8);
 		text-align: center;
 	}
@@ -513,7 +513,7 @@ ca	ul.actions
 		background: #FFF;
 		margin-top: 3em;
 		font-size: 1em;
-		color: #009E2D;
+		color: #00AAAA;
 	}
 
 	#featured .title
