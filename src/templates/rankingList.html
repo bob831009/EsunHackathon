@@ -16,16 +16,16 @@
         <div class="form-inline row">
           <!-- <label class="sr-only" for="inlineFormInput">Name</label> -->
           <!-- <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Jane Doe"> -->
-          <div class="col-md-4" style="border-color: black;border-style: solid;">
+          <div class="col-md-4">
             <a href="#"> {{ product['prod_name'] }} </a>
           </div>
           <label class="sr-only" for="inlineFormInputGroup">Username</label>
-          <div class="input-group col-md-4" style="border-color: black;border-style: solid;">
+          <div class="input-group col-md-4">
             <div class="input-group-addon">@</div>
             <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Username">
           </div>
 
-          <div class="form-check col-md-4" style="border-color: black;border-style: solid;">
+          <div class="form-check col-md-4">
             <label class="form-check-label">
               <input class="form-check-input" type="checkbox" onclick="window.location='{{ url_for('.productRank', isRefresh='no', productDict=products, listIdx=key) }}';"> Remember me
               
@@ -36,8 +36,8 @@
         </div>
       </div>
     {% endfor %}
+    </div>
   </div>
-
 </body>
 </html>
 

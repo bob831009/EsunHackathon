@@ -149,6 +149,8 @@ def create_app(configfile=None):
 	def productRank():
 		if 'isLogin' not in session:
 			return redirect(url_for('.mainPage'))
+		data = {'isLogin' : True}
+		user_id = username2customerID[json.loads(session['isLogin'])['username']]
 		if 'isRefresh' in request.args and request.args['isRefresh'] == 'no':
 			print ('no refresh')
 			print (request.args)
@@ -159,23 +161,16 @@ def create_app(configfile=None):
 			listIdx = int(request.args['listIdx'])
 			product_dict = ast.literal_eval(request.args['productDict'])
 			
-			like_prod(0, product_dict[listIdx]['prod_id'], user_data, user_clusters, prod_data)
+			like_prod(user_id, product_dict[listIdx]['prod_id'], user_data, user_clusters, prod_data)
 			
-			# product_dict = dict(request.args['productDict'])
-			return render_template('rankingList.html', products=product_dict)
-		print (json.loads(session['isLogin'])['username'])
-		user_id = username2customerID[json.loads(session['isLogin'])['username']]
-		# json.loads(session['isLogin'])['username']
-		print (json.loads(session['isLogin'])['username'] + str(user_id))
+			return render_template('productRank.html', products=product_dict, data=data)
+		print('yes refresh')
 		prod_list = create_recommand_list(user_id, user_data, prod_clusters)
-		print (prod_list[0])
-		print (prod_data[prod_list[0]])
-		# product_list = [prod_data[prod_list[idx]] for idx in range(10)]
 		product_dict = {}
 		for idx in range(10):
 			product_dict[idx] = prod_data[prod_list[idx]]
 		print (product_dict)
-		return render_template('rankingList.html', products=product_dict)
+		return render_template('productRank.html', products=product_dict, data=data)
 		
 	@app.route('/hello')
 	def helloWorld():
