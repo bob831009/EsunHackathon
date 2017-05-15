@@ -19,10 +19,10 @@ Released   : 20140309
 	<link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
 
 	
-	<!-- <link href="style.css" rel="stylesheet" type="text/css" media="all" -->
-	<link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='stylesheet/style.css') }}" media="all">
 	<!-- <link href="bootstrap.css" rel="stylesheet" type="text/css" media="all" -->
-	<link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='stylesheet/bootstrap.css') }}" media="all">
+	<link rel="stylesheet" type="text/css"  href="../static/stylesheet/bootstrap.css">
+	<!-- <link href="bootstrap.css" rel="stylesheet" type="text/css" media="all" -->
+	<link rel="stylesheet" type="text/css"  href="../static/stylesheet/style.css">
 
 
 	<!-- <link href="default.css" rel="stylesheet" type="text/css" media="all" />
@@ -62,8 +62,8 @@ Released   : 20140309
 	
 	<div id="extra" class="container">
 		<div class="title">
-			<h2>Praesent scelerisquet</h2>
-			<span class="byline">Donec leo, vivamus fermentum nibh in augue praesent a lacus at urna congue</span> </div>
+			<h2>Let you be ahead of pack</h2>
+			<span class="byline">FIN-TACTIC, being your a best partner, lets you make best investment </span> </div>
 		<div id="three-column">
 			<div class="boxA" onclick="window.location='{{ url_for('.hotIssue', data=data) }}';">
 				<div class="box"> <span class="fa fa-cloud-download"></span>
@@ -94,80 +94,89 @@ Released   : 20140309
 		</ul>
 	</div>
 	<div id="page" class="container">
-		<!-- About Us Section -->
-		<div id="about-us">
-		    <div class="container">
-		    	<dir class="row">
-		            <div class="text-center">
-		                <div class="col-md-8 col-md-offset-2">
-		                    <div class="section-title">
-		                        <h2>About Us</h2>
-		                        <hr>
-		                    </div>
-		                    <p>A team is consist of 5 CSIE students.</p>
-		                </div>
-		            </div>
-		        </dir>
-		        <div class="space"></div>
-		        <div class="container-fluid">
-		        	<div class="row text-center">
-		                <div class="col-md-2 col-sm-2">
-		                    <div class="team">
-		                        <img src="{{ url_for('static', filename='team/01.jpg') }}" class="img-responsive img-circle" alt="...">
-		                        <br>
-		                        <h4>Kevin Wei</h4>
-		                        <p class="small">Leader</p>
-		                        <hr>
-		                    </div>
-		                </div>
-		                <div class="col-md-2 col-sm-2">
-		                    <div class="team">
-		                        <img src="{{ url_for('static', filename='team/02.jpg') }}" class="img-responsive img-circle" alt="...">
-		                        <br>
-		                        <h4>Frank Lin</h4>
-		                        <p class="small">Web Coder</p>
-		                        <hr>
-		                    </div>
-		                </div>
-		                <div class="col-md-2 col-sm-2">
-		                    <div class="team">
-		                        <img src="{{ url_for('static', filename='team/03.jpg') }}" class="img-responsive img-circle" alt="...">
-		                        <br>
-		                        <h4>Cute Lang</h4>
-		                        <p class="small">Web Designer</p>
-		                        <hr>
-		                    </div>
-		                </div>
-		                <div class="col-md-2 col-sm-2">
-		                    <div class="team">
-		                        <img src="{{ url_for('static', filename='team/04.jpg') }}" class="img-responsive img-circle" alt="...">
-		                        <br>
-		                        <h4>Leo Chang</h4>
-		                        <p class="small">Web Designer</p>
-		                        <hr>
-		                    </div>
-		                </div>
-		                <div class="col-md-2 col-sm-2">
-		                    <div class="team">
-		                        <img src="{{ url_for('static', filename='team/05.jpg') }}" class="img-responsive img-circle" alt="...">
-		                        <br>
-		                        <h4>Jerry Chou</h4>
-		                        <p class="small">Web Designer</p>
-		                        <hr>
-		                    </div>
-		                </div>
-		            </div>
-		        </div>
-
-		        <div class="text-center">
-		            <a href="#contact" class="page-scroll down-btn">
-		                <span class="fa fa-angle-down"></span>
-		            </a>
-		        </div>
-		    </div>
-		</div>
+		<div class="title">
+			<h2>Nulla luctus eleifend</h2>
+			<span class="byline">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</span> </div>
+		<p> Vivamus fermentum nibh in augue. Praesent a lacus at urna congue rutrum. Nulla enim eros nibh. Duis enim nulla, luctus eu, dapibus lacinia, venenatis id, quam. Vestibulum imperdiet, magna nec eleifend rutrum, nunc lectus vestibulum velit, euismod lacinia quam nisl id lorem. Quisque erat. Vestibulum pellentesque, justo mollis pretium suscipit, justo nulla blandit libero, in blandit augue justo quis nisl. Fusce mattis viverra elit. Fusce quis tortor.</p>
+		<ul class="actions">
+			<li><a href="#" class="button">Etiam posuere</a></li>
+		</ul>
 	</div>
+	<!-- About Us Section -->
+	<div id="about-us">
+	    <div class="container">
+	    	<dir class="row">
+	            <div class="text-center">
+	                <div class="col-md-8 col-md-offset-2">
+	                    <div class="section-title">
+	                        <h2>About Us</h2>
+	                        <hr>
+	                    </div>
+	                    <p>A team is consist of 5 CSIE students.</p>
+	                </div>
+	            </div>
+	        </dir>
+	        <div class="space"></div>
+	        <div class="container-fluid">
+	        	<div class="row text-center">
+	                <div class="col-md-2 col-sm-2">
+	                    <div class="team">
+	                        <img src="../../data/img/team/01.jpg" class="img-responsive img-circle" alt="...">
+	                        <br>
+	                        <h4>Kevin Wei</h4>
+	                        <p class="small">Leader</p>
+	                        <hr>
+	                    </div>
+	                </div>
+	                <div class="col-md-2 col-sm-2">
+	                    <div class="team">
+	                        <img src="../../data/img/team/02.jpg" class="img-responsive img-circle" alt="...">
+	                        <br>
+	                        <h4>Frank Lin</h4>
+	                        <p class="small">Web Coder</p>
+	                        <hr>
+	                    </div>
+	                </div>
+	                <div class="col-md-2 col-sm-2">
+	                    <div class="team">
+	                        <img src="../../data/img/team/03.jpg" class="img-responsive img-circle" alt="...">
+	                        <br>
+	                        <h4>Cute Lang</h4>
+	                        <p class="small">Web Designer</p>
+	                        <hr>
+	                    </div>
+	                </div>
+	                <div class="col-md-2 col-sm-2">
+	                    <div class="team">
+	                        <img src="../../data/img/team/04.jpg" class="img-responsive img-circle" alt="...">
+	                        <br>
+	                        <h4>Leo Chang</h4>
+	                        <p class="small">Web Designer</p>
+	                        <hr>
+	                    </div>
+	                </div>
+	                <div class="col-md-2 col-sm-2">
+	                    <div class="team">
+	                        <img src="../../data/img/team/05.jpg" class="img-responsive img-circle" alt="...">
+	                        <br>
+	                        <h4>Jerry Chou</h4>
+	                        <p class="small">Web Designer</p>
+	                        <hr>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+
+	        <div class="text-center">
+	            <a href="#contact" class="page-scroll down-btn">
+	                <span class="fa fa-angle-down"></span>
+	            </a>
+	        </div>
+	    </div>
+	</div>
+
 </div>
+
 
 
 <div id="copyright" class="container">
