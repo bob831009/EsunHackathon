@@ -55,7 +55,7 @@ def create_app(configfile=None):
 	prod_clusters = readPickle(os.path.join('./data', 'prod_clusters.pkl'))
 	# prod_data = pickle.load('prod_data.pkl')
 	# prod_clusters = pickle.load('prod_clusters.pkl')
-
+	# customer = [None, None]
 
 
 	app = Flask(__name__, static_url_path='/src/static')
@@ -93,6 +93,8 @@ def create_app(configfile=None):
 			if username in username2customerID and password == customerDB[username2customerID[username] - 1][2]:
 				print('[INFO]:login --> username ( ' + form.username.data + ' ) confirmed')
 				session['isLogin'] = json.dumps(request.form)
+				# customer = [username, username2customerID[username]]
+
 			return redirect(url_for(redirectUrl()))
 			
 		return render_template('login.html', form=form)
@@ -130,6 +132,7 @@ def create_app(configfile=None):
 	def logout():
 		# print(request.args['fromUrl'])
 		session.pop('isLogin', None)
+		# customer = [None, None]
 		return redirect(url_for(redirectUrl()))
 	
 
@@ -144,6 +147,8 @@ def create_app(configfile=None):
 		# print request.args['']
 	@app.route('/productRank')
 	def productRank():
+		if 'isLogin' not in session:
+			return redirect(url_for('.mainPage'))
 		if 'isRefresh' in request.args and request.args['isRefresh'] == 'no':
 			print ('no refresh')
 			print (request.args)
@@ -158,7 +163,10 @@ def create_app(configfile=None):
 			
 			# product_dict = dict(request.args['productDict'])
 			return render_template('rankingList.html', products=product_dict)
-		user_id = 0
+		print (json.loads(session['isLogin'])['username'])
+		user_id = username2customerID[json.loads(session['isLogin'])['username']]
+		# json.loads(session['isLogin'])['username']
+		print (json.loads(session['isLogin'])['username'] + str(user_id))
 		prod_list = create_recommand_list(user_id, user_data, prod_clusters)
 		print (prod_list[0])
 		print (prod_data[prod_list[0]])
