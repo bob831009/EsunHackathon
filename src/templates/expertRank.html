@@ -31,11 +31,12 @@ Released   : 20140309
  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
 	<style>
-		th {
-			font-size: 35px;
+		img {
+			width: 80px;
+			height: 80px;
 		}
-		td {
-			font-size: 25px;
+		h2 {
+			margin-bottom: 5px;
 		}
 	</style>
 </head>
@@ -70,106 +71,28 @@ Released   : 20140309
 		<div class="title">
 			<h2>Praesent scelerisquet</h2>
 			<span class="byline">Donec leo, vivamus fermentum nibh in augue praesent a lacus at urna congue</span> </div>
-		<div class="container" style="float: left; width: 45%; margin-left: 5%;">    
-		    <button type="button" onclick="window.location='{{ url_for('.productRank', isRefresh='yes', productDict=products) }}';">Refresh</button>
+		<div class="container">    
 		    <div class="list-group">
-		    {% for key, product in products.iteritems() %}
+		    {% for key, expert in experts.iteritems() %}
 		    	<div class='list-group-item'>
 		        	<div class="form-inline row">
-		          <!-- <label class="sr-only" for="inlineFormInput">Name</label> -->
-		          <!-- <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Jane Doe"> -->
-		          		<div class="col-md-4">
-		            		<a href="{{ url_for('.productRank', isRefresh='no', productDict=products, productIdx=key) }}"> {{ product['基金名稱'] }} </a>
-		          		</div>
-		          		<div class="col-md-3">
-		          			<h3> 風險報酬等級 : {{ product['風險報酬等級'] }} </h3>
-		          		</div>
-		          		<div class="col-md-3">
-		          			<h3> 報酬率 : {{ product['報酬率3個月'] }} </h3>
-		          		</div>
-		          		<div class="form-check col-md-2">
-		            		<button type="button" onclick=onclick="window.location='{{ url_for('.productRank', isRefresh='no', productDict=products, listIdx=key) }}';">Like</button>
-		          		</div>
-
+		        		<div class="col-md-3">
+		        			<img src="{{ url_for('static', filename=expert['profile_path']) }}" class="img-responsive center-block"  alt="...">
+		        			<center> name : {{ expert['name'] }} </center>
+		        			<center> ID : {{ expert['id'] }} </center>
+		        		</div>
+		        		<div class="col-md-9">
+		        			<h2>Success Experience</h2>
+		        			<h2>1. {{ expert['top5'][0]['基金名稱'] }}</h2>
+		          			<h2>2. {{ expert['top5'][1]['基金名稱'] }}</h2>
+		          			<h2>3. {{ expert['top5'][2]['基金名稱'] }}</h2>
+		        		</div>
+		          		
 		          		<!-- <button type="submit" class="btn btn-primary">Submit</button> -->
 		        	</div>
 		      	</div>
 		    {% endfor %}
 		    </div>
-		</div>
-		<div class="container" style="float: left; width: 45%;">
-			{% if data['listIdx'] < 10 %}
-				<table class="container" style="width:100%">
-				  <tr>
-				    <th style="width: 25%; margin-right: 5%;">基金名稱</th>
-				    <th>{{ products[data['listIdx']]['基金名稱'] }}</th> 
-				  </tr>
-				  <tr>
-				    <td>基金公司</td>
-				    <td>{{ products[data['listIdx']]['基金公司'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>基金類型</td>
-				    <td>{{ products[data['listIdx']]['基金類型'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>淨值</td>
-				    <td>{{ products[data['listIdx']]['淨值'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>報酬率3個月</td>
-				    <td>{{ products[data['listIdx']]['報酬率3個月'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>報酬率6個月</td>
-				    <td>{{ products[data['listIdx']]['報酬率6個月'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>報酬率1年</td>
-				    <td>{{ products[data['listIdx']]['報酬率1年'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>報酬率3年</td>
-				    <td>{{ products[data['listIdx']]['報酬率3年'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>風險標準差</td>
-				    <td>{{ products[data['listIdx']]['風險標準差'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>風險beta</td>
-				    <td>{{ products[data['listIdx']]['風險beta'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>成立日期</td>
-				    <td>{{ products[data['listIdx']]['成立日期'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>基金規模</td>
-				    <td>{{ products[data['listIdx']]['基金規模'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>淨值</td>
-				    <td>{{ products[data['listIdx']]['淨值'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>成立時規模</td>
-				    <td>{{ products[data['listIdx']]['成立時規模'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>風險報酬等級</td>
-				    <td>{{ products[data['listIdx']]['風險報酬等級'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>基金統編</td>
-				    <td>{{ products[data['listIdx']]['基金統編'] }}</td>
-				  </tr>
-				  <tr>
-				    <td>投資標的</td>
-				    <td>{{ products[data['listIdx']]['投資標的'] }}</td>
-				  </tr>
-				</table>
-			{% endif %}
 		</div>
 	</div>
 </div>

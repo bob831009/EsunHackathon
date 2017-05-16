@@ -7,15 +7,17 @@ from wtforms import BooleanField
 
 from custom_form import RegisterForm, LoginForm, ProductForm
 from customerDB import getCustomerDB, getUsername2CustomerIdx
+from match_expert import match
 from utils import *
-
-from customer_kmeans import getUserData, getUserClusterData
 
 import ast
 import random
 import numpy as np
 import json
 import os
+
+root_dir = '.'
+data_dir = os.path.join(root_dir, 'data')
 
 def redirectUrl():
 	if request.args['fromUrl'] == 'hotIssue':
@@ -31,7 +33,8 @@ def create_recommand_list(user_id, user_data, prod_clusters):
 	sort_list = np.argsort(np.array(score_list)).tolist()
 	prod_list = []
 	for i in range(10):
-		prod_list.append(prod_clusters[sort_list[i]]['prod_ids'][random.randint(0, len(prod_clusters[sort_list[i]]['prod_ids']) - 1)])
+		prod_list.append(prod_clusters[sort_list[i]]['cluster_members'][random.randint(0, len(prod_clusters[sort_list[i]]['cluster_members']) - 1)])
+	print (prod_list)
 	return prod_list
 
 def like_prod(user_id, prod_id, user_data, user_clusters, prod_data):
@@ -47,16 +50,16 @@ def create_app(configfile=None):
 	customerDB = getCustomerDB()
 	username2customerID = getUsername2CustomerIdx()
 
-	user_data = getUserData()	
-	user_clusters = getUserClusterData()
-	# user_data = pickle.load('user_data.pkl')
-	# user_clusters = pickle.load('user_clusters.pkl')
-	prod_data = readPickle(os.path.join('./data', 'prod_data.pkl'))
-	prod_clusters = readPickle(os.path.join('./data', 'prod_clusters.pkl'))
+	user_data = readPickle(os.path.join(data_dir, 'user_data.pkl'))
+	user_clusters = readPickle(os.path.join(data_dir, 'user_clusters.pkl'))
+	# prod_data = readPickle(os.path.join(data_dir, 'prod_data.pkl'))
+	prod_data = readJson(os.path.join(data_dir, 'new_fund.json'))
+	prod_clusters = readJson(os.path.join(data_dir, 'cluster_centers.json'))
+	
+	expert_data = readJson(os.path.join(data_dir, 'financial_commissioner.json'))
 	# prod_data = pickle.load('prod_data.pkl')
 	# prod_clusters = pickle.load('prod_clusters.pkl')
 	# customer = [None, None]
-
 
 	app = Flask(__name__, static_url_path='/src/static')
 	
@@ -74,7 +77,7 @@ def create_app(configfile=None):
 		form = RegisterForm()
 		if request.method == 'POST' and form.validate_on_submit():
 			# print ('valite on submit = ' + str())
-			print (form.checkbox_field.data)
+			# print (form.checkbox_field.data)
 			if form.username.data in username2customerID:
 				return redirect(url_for('.register'))
 
@@ -149,51 +152,42 @@ def create_app(configfile=None):
 	def productRank():
 		if 'isLogin' not in session:
 			return redirect(url_for('.mainPage'))
-		data = {'isLogin' : True}
-		user_id = username2customerID[json.loads(session['isLogin'])['username']]
+		data = {'isLogin' : True, 'listIdx' : 10}
+		if json.loads(session['isLogin'])['username'] not in username2customerID:
+			user_id = int(json.loads(session['isLogin'])['customer_id'])
+		else:
+			user_id = username2customerID[json.loads(session['isLogin'])['username']]
 		if 'isRefresh' in request.args and request.args['isRefresh'] == 'no':
-			print ('no refresh')
-			print (request.args)
-			print ('--------------------')
-			print (request.args['productDict'])
-			print (type(request.args['productDict']))
-			print ('idx ====== ' + str(int(request.args['listIdx'])))
-			listIdx = int(request.args['listIdx'])
-			product_dict = ast.literal_eval(request.args['productDict'])
-			
-			like_prod(user_id, product_dict[listIdx]['prod_id'], user_data, user_clusters, prod_data)
-			
-			return render_template('productRank.html', products=product_dict, data=data)
+			if 'listIdx' in request.args:
+				print ('idx ====== ' + str(int(request.args['listIdx'])))
+				listIdx = int(request.args['listIdx'])
+				product_dict = ast.literal_eval(request.args['productDict'])
+				like_prod(user_id, product_dict[listIdx]['id'], user_data, user_clusters, prod_data)
+				return render_template('productRank.html', products=product_dict, data=data)
+			elif 'productIdx' in request.args:
+				data['listIdx'] = int(request.args['productIdx'])
+				product_dict = ast.literal_eval(request.args['productDict'])
+				return render_template('productRank.html', products=product_dict, data=data)
 		print('yes refresh')
 		prod_list = create_recommand_list(user_id, user_data, prod_clusters)
 		product_dict = {}
 		for idx in range(10):
+			# print (prod_data[prod_list[idx]])
 			product_dict[idx] = prod_data[prod_list[idx]]
-		print (product_dict)
+		# print (product_dict)
 		return render_template('productRank.html', products=product_dict, data=data)
-		
-	@app.route('/hello')
-	def helloWorld():
-		print ('hello world')
-		# global myName
-		# print (myName)
-		# myName += 1
-		# myName.append(55)
-		# customerDB.append(['XDDD'])
-		# product = ['AAA', 'BBB', 'CCC', 'DDD']
-		# product = [BooleanField('AAA', default=False), BooleanField('BBB', default=False), BooleanField('CCC', default=False)]
-		user_id = 0
-		prod_list = create_recommand_list(user_id, user_data, prod_clusters)
-		print (prod_list[0])
-		print (prod_data[prod_list[0]])
-		product_list = [prod_data[prod_list[idx]] for idx in range(10)]
-		product_list = {}
-		for idx in range(10):
-			product_list[idx] = prod_data[prod_list[idx]]
-		# product = [ProductForm(), ProductForm(), ProductForm()]
-		# print (product[0].like_button.data)
-		return render_template('rankingList.html', products=product_list)
-		# return render_template()
+	@app.route('/expertRank')
+	def expertRank():
+		if 'isLogin' not in session:
+			return redirect(url_for('.mainPage'))
+		data = {'isLogin' : True}
+		if json.loads(session['isLogin'])['username'] not in username2customerID:
+			user_id = int(json.loads(session['isLogin'])['customer_id'])
+		else:
+			user_id = username2customerID[json.loads(session['isLogin'])['username']]
+		print (expert_data)
+		expert_dict = match(expert_data, user_id, user_data, prod_data, prod_clusters)
+		return render_templaxte('expertRank.html', experts=expert_dict, data=data)
 	return app
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 import csv
 import pickle
 import os
+import json
 
 def readFile(fin):
 	with open(fin) as file:
@@ -21,4 +22,7 @@ def readCSV(fin):
 		content = list(csv.reader(file, delimiter=',', quotechar='"'))
 	return content
 
-	
+def readJson(fin):
+	with open(fin) as file:
+		 content = json.load(file)
+	return content

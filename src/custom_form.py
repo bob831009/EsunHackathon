@@ -12,7 +12,7 @@ class RegisterForm(FlaskForm):
 	# 	('like_button', 'like'),
 	# 	('dislike_button', 'dislike')
 	# ])
-	checkbox_field = BooleanField('This is a checkbox', default=False, description='Checkboxes can be tricky.')
+	# checkbox_field = BooleanField('This is a checkbox', default=False, description='Checkboxes can be tricky.')
 	submit_button = SubmitField('Submit Form')
 
 class LoginForm(FlaskForm):
