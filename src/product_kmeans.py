@@ -40,7 +40,14 @@ def handling_scale(currency_conversion, scale):
 	num = num * currency_conversion[dollar_catg];
 	return num;
 
-def handle_cluster_center(arr):
+def handle_cluster_center(arr, X_category):
+	cluster_members = {};
+	for i in range(len(X_category)):
+		if(X_category[i] not in cluster_members):
+			cluster_members[X_category[i]] = [];
+		cluster_members[X_category[i]].append(i);
+
+
 	res = [];
 	for i in range(len(arr)):
 		data = arr[i];
@@ -58,7 +65,8 @@ def handle_cluster_center(arr):
 			'established_scale': data[9],
 			'scale': data[10],
 			'risk_standard_deviation': data[11],
-			'fee': data[12]
+			'fee': data[12],
+			'cluster_members': cluster_members[i]
 		}
 		res.append(center_info);
 	return res;
@@ -127,7 +135,7 @@ for fund_info in fund_datas:
 X = np.array(features);
 kmeans = KMeans(n_clusters=20, random_state=0).fit(X);
 X_category = kmeans.labels_;
-cluster_centers = handle_cluster_center(kmeans.cluster_centers_);
+cluster_centers = handle_cluster_center(kmeans.cluster_centers_, X_category);
 
 with open('../data/cluster_centers.json', 'w') as f:
 	json.dump(cluster_centers, f, indent=1);
