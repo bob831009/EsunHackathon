@@ -1,136 +1,143 @@
-import tensorflow as tf
-import csv
-import random
+#coding=utf-8
+from sklearn.cluster import KMeans
 import numpy as np
 import json
+import io
+import sys
 
-gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.1)
-sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+# sys.setdefaultencoding('UTF8');
+def get_unicode_info(dic, key):
+	return dic[key.decode('utf-8')];
 
-# data features
-customer_data = []
-with open('../data/customers.csv', 'r') as f:
-	data = csv.reader(f)
-	for d in data:
-		customer_data.append(d)
 
-customer_data = customer_data[1:]
+def remove_shit(a):
+	if(len(a) == 0):
+		return '0';
+	for i in range(len(a)):
+		if(not (a[i].isdigit() or a[i] == '.')):
+			if(i == 0):
+				return '0';
+			return a[:i];
+	return a;
 
-print len(customer_data)
+def hash_invest_region(total_invest_region, region):
+	if(not region in total_invest_region):
+		total_invest_region.append(region);
+	return total_invest_region.index(region);
 
-for c in customer_data:
-	#c[0] = int(c[0])
-	if c[1] == 'F':
-		c[1] = 0.
-	elif c[1] == 'M':
-		c[1] = 1.
-	for j in range(2, 10):
-		if c[j] == 'N':
-			c[j] = 0.
-		elif c[j] == 'Y':
-			c[j] = 1.
-	c[10] = float(c[10])
-	c[11] = float(c[11])
-	# id = index+1
-	c.pop(0)
-
-data_vectors = customer_data
-init_n = 50000
-init_users = data_vectors[:init_n]
-follow_users = data_vectors[init_n:]
-
-# data structure
-num_prod_clusters = 20
-
-num_vectors = 200000
-num_clusters = 20
-num_steps = 100
-num_dims = 11
-
-user_data = []
-for i in range(num_vectors):
-	user_tmp = dict()
-	user_tmp['user_id'] = i
-	user_tmp['features'] = data_vectors[i]
-	if (i < init_n):
-		user_tmp['scores'] = [round(random.uniform(0, 10), 3) for j in range(num_prod_clusters)]
+def check_NA(a):
+	if(a == 'N/A'):
+		return '0.0';
 	else:
-		user_tmp['scores'] = [0. for j in range(num_prod_clusters)]
-	user_tmp['cluster_id'] = -1
-	user_data.append(user_tmp)
+		return a;
 
-user_clusters = []
-for i in range(num_clusters):
-	cluster_tmp = dict()
-	cluster_tmp['cluster_id'] = i
-	cluster_tmp['user_ids'] = []
-	cluster_tmp['scores'] = [0. for j in range(num_prod_clusters)]
-	user_clusters.append(cluster_tmp)
+def handling_scale(currency_conversion, scale):
+	scale = scale.strip();
+	if(len(scale) == 0):
+		return 0.0;
+	num = float(remove_shit(scale));
+	dollar_catg = scale[scale.index('(') + 1:scale.index(')')];
+	num = num * currency_conversion[dollar_catg];
+	return num;
 
-# k-means
-#vectors = tf.constant(init_users)
-#random_indices = tf.random_shuffle(tf.range(0, num_vectors))
-#centroid_indices = tf.slice(random_indices, [0,], [num_clusters,])
-#init_centroids = tf.Variable(tf.gather(data_vectors, centroid_indices))
-init_centroids = tf.Variable(init_users[:num_clusters])
+def handle_cluster_center(arr):
+	res = [];
+	for i in range(len(arr)):
+		data = arr[i];
+		center_info = {
+			'id': i,
+			'least_buy': data[0],
+			'net_worth': data[1],
+			'main_invest_region': data[2],
+			'risk_beta': data[3],
+			'return_on_investment_3month': data[4],
+			'return_on_investment_6month': data[5],
+			'return_on_investment_1year': data[6],
+			'return_on_investment_3year': data[7],
+			'risk_return_level': data[8],
+			'established_scale': data[9],
+			'scale': data[10],
+			'risk_standard_deviation': data[11],
+			'fee': data[12]
+		}
+		res.append(center_info);
+	return res;
 
-centroids = tf.placeholder('float32', [num_clusters, num_dims])
-vectors = tf.placeholder('float32', [None, num_dims])
 
-expanded_vectors = tf.expand_dims(vectors, 0)
-expanded_centroids = tf.expand_dims(centroids, 1)
 
-vectors_sub = tf.subtract(expanded_vectors, expanded_centroids)
-distances = tf.reduce_sum(tf.square(vectors_sub), 2)
-assignments = tf.to_int32(tf.argmin(distances, 0))
+customer_data = []
+fund_datas = []
+with open('../data/fund.json') as f:
+	fund_datas = json.load(f);
+	
+features = [];
+total_invest_region = [];
+currency_conversion = {
+	'台幣': 1,
+	'人民幣': 4.35,
+	'美元': 30,
+	'南非幣': 2.3,
+	'澳幣': 22.3,
+	'¥x¹ô': 0,
+	'歐元': 33,
+	'紐幣': 20.5
+}
+for fund_info in fund_datas:
+	tmp_feature = [];
+	
+	least_buy = fund_info['單筆最低申購'][:-1].strip().replace(',', '');
+	least_buy = int(remove_shit(least_buy));
+	
+	net_worth = float(check_NA(fund_info['淨值']));
+	main_invest_region = hash_invest_region(total_invest_region, fund_info['主要投資區域']);
+	risk_beta = float(check_NA(fund_info['風險beta']));
+	return_on_investment_3month = float(check_NA(fund_info['報酬率3個月']));
+	return_on_investment_6month = float(check_NA(fund_info['報酬率6個月']));
+	return_on_investment_1year = float(check_NA(fund_info['報酬率1年']));
+	return_on_investment_3year = float(check_NA(fund_info['報酬率3年']));
 
-partitions = tf.dynamic_partition(vectors, assignments, num_clusters)
-update_centroids = tf.concat([tf.expand_dims(tf.reduce_mean(partition, 0), 0) for partition in partitions], 0)
 
-# session
-init = tf.initialize_all_variables()
-sess = tf.Session()
-sess.run(init)
+	risk_return_level = fund_info['風險報酬等級'];
+	if(risk_return_level[0]=='R'): risk_return_level = int(risk_return_level[2]);
+	else: risk_return_level = 6 + ['低波動度', '中波動度', '高波動度', 'N/A'].index(risk_return_level[:4]);
 
-new_centroids = sess.run(init_centroids)
-for step in xrange(num_steps):
-	print step
-	#tmp = sess.run(update_centroids)
-	#print tmp
-	new_centroids, assignment_values = sess.run([update_centroids, assignments], feed_dict={centroids: new_centroids, vectors: init_users})
-	#print new_centroids
-	#print len(assignment_values)
+	established_scale = handling_scale(currency_conversion, fund_info['成立時規模']);
+	scale = handling_scale(currency_conversion, fund_info['基金規模']);
 
-# updata data
-current_centroids = new_centroids
+	risk_standard_deviation = float(check_NA(fund_info['風險標準差']));
+	fee = float(check_NA(fund_info['手續費(%)']));
+	
+	tmp_feature = [
+		least_buy,
+		net_worth,
+		main_invest_region,
+		risk_beta,
+		return_on_investment_3month,
+		return_on_investment_6month,
+		return_on_investment_1year,
+		return_on_investment_3year,
+		risk_return_level,
+		established_scale,
+		scale,
+		risk_standard_deviation,
+		fee
+	]
+	features.append(tmp_feature);
 
-for i in range(len(assignment_values)):
-	user_data[i]['cluster_id'] = assignment_values[i]
-	user_clusters[assignment_values[i]]['user_ids'].append(i)
+X = np.array(features);
+kmeans = KMeans(n_clusters=20, random_state=0).fit(X);
+X_category = kmeans.labels_;
+cluster_centers = handle_cluster_center(kmeans.cluster_centers_);
 
-for i in range(len(user_clusters)):
-	for j in user_clusters[i]['user_ids']:
-		user_clusters[i]['scores'] = np.add(user_clusters[i]['scores'], user_data[j]['scores'])
+with open('../data/cluster_centers.json', 'w') as f:
+	json.dump(cluster_centers, f, indent=1);
 
-new_centroids, assignment_values = sess.run([update_centroids, assignments], feed_dict={centroids: current_centroids, vectors: follow_users})
-#print len(assignment_values)
-
-for i in range(len(assignment_values)):
-	user_data[init_n + i]['cluster_id'] = assignment_values[i]
-	user_clusters[assignment_values[i]]['user_ids'].append(init_n + i)
-
-#print user_data[100000]
-for i in range(num_clusters):
-	print user_clusters[i]['scores'], len(user_clusters[i]['user_ids'])
-
-with open('user_data.txt', 'w') as f_user:
-	#json.dumps(user_data, f_user)
-	for user in user_data:
-		f_user.write(str(user))
-
-with open('user_clusters.txt', 'w') as f_cluster:
-	#json.dumps(user_clusters, f_cluster)
-	for cluster in user_clusters:
-		f_cluster.write(str(cluster))
-
+new_fund_datas = [];
+for i in range(len(fund_datas)):
+	fund_info = fund_datas[i];
+	fund_info['id'] = i;
+	fund_info['cluster_id'] = int(X_category[i]);
+	new_fund_datas.append(fund_info);
+with open('../data/new_fund.json', 'w') as f:
+	json.dump(new_fund_datas, f, indent=1, ensure_ascii=False);
 
