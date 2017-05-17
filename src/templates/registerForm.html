@@ -17,12 +17,12 @@ Released   : 20140309
 		<meta name="keywords" content="" />
 		<meta name="description" content="" />
 		<link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
-		<link href="../static/stylesheet/default.css" rel="stylesheet" type="text/css" media="all" />
-		<link href="../static/stylesheet/fonts.css" rel="stylesheet" type="text/css" media="all" />
+		<link href="{{ url_for('static', filename='stylesheet/default.css') }}" rel="stylesheet" type="text/css" media="all" />
+		<link href="{{ url_for('static', filename='stylesheet/fonts.css') }}" rel="stylesheet" type="text/css" media="all" />
 
 		<!-- Bootstrap -->
-		<link rel="stylesheet" type="text/css"  href="../static/stylesheet/bootstrap.css">
-		<link rel="stylesheet" type="text/css"  href="../static/stylesheet/style.css">
+		<link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='stylesheet/bootstrap.css') }}">
+		<link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='stylesheet/style.css') }}">
 
 	</head>
 		<body><form class="form-horizontal">
@@ -119,7 +119,7 @@ Released   : 20140309
 			<!-- The SDK has a dependency on requirejs (http://requirejs.org/). -->
 		    <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js"></script>
 		    <!-- SDK REFERENCE -->
-		    <script src="../static/js/speech.browser.sdk.js"></script>
+		    <script src="{{ url_for('static', filename='js/speech.browser.sdk.js') }}"></script>
 
 		    <!-- SDK USAGE -->
 		    <script>
