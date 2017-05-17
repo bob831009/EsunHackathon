@@ -74,17 +74,10 @@ def create_app(configfile=None):
 
 	@app.route('/register', methods=('GET', 'POST'))
 	def register():
-		form = RegisterForm()
-		if request.method == 'POST' and form.validate_on_submit():
-			# print ('valite on submit = ' + str())
-			# print (form.checkbox_field.data)
-			if form.username.data in username2customerID:
-				return redirect(url_for('.register'))
-
+		if request.method == 'POST':
 			session['isLogin'] = json.dumps(request.form)
 			return redirect(url_for(redirectUrl()))
-			
-		return render_template('register.html', form=form)
+		return render_template('registerForm.html', fromUrl=request.args['fromUrl'])
 
 	@app.route('/login', methods=('GET', 'POST'))
 	def login():
@@ -185,9 +178,10 @@ def create_app(configfile=None):
 			user_id = int(json.loads(session['isLogin'])['customer_id'])
 		else:
 			user_id = username2customerID[json.loads(session['isLogin'])['username']]
-		print (expert_data)
+		print (user_id)
 		expert_dict = match(expert_data, user_id, user_data, prod_data, prod_clusters)
-		return render_templaxte('expertRank.html', experts=expert_dict, data=data)
+		print (expert_dict)
+		return render_template('expertRank.html', experts=expert_dict, data=data)
 	return app
 
 if __name__ == '__main__':

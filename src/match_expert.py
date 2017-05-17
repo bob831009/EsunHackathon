@@ -7,8 +7,7 @@ def match(financial_commissioners, user_id, user_data, prod_data, prod_clusters)
 	sort_list = np.argsort(np.array(score_list)).tolist()
 	client_top5 = []
 	for i in range(5):
-		client_top5.append(prod_clusters[sort_list[i]]['cluster_members'][random.randint(0, len(prod_clusters[sort_list[i]]['cluster_members'])-1)])
-
+		client_top5.append(prod_clusters[sort_list[i]]['id'])
 	alpha = 0.7;
 	beta = 0.3;
 	score = [];
@@ -23,10 +22,8 @@ def match(financial_commissioners, user_id, user_data, prod_data, prod_clusters)
 		score.append(tmp_score);
 	sorted_score = sorted(score, reverse=True);
 	sorted_index = sorted(range(len(score)), key=lambda k: score[k], reverse=True);
-	
 	top5_fc_index = sorted_index[:5];
 	top5_fc_info = {};
-	print(top5_fc_index);
 	for index in top5_fc_index:
 		top5_fc_info[index] = financial_commissioners[index].copy();
 	for key in top5_fc_info:
