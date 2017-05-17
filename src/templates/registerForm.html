@@ -302,6 +302,11 @@ Released   : 20140309
 		                SDK = speechSdk;
 		                // startBtn.disabled = false;
 		                firstNameBtn.disabled = false;
+		                lastNameBtn.disabled = false;
+		                emailBtn.disabled = false;
+		                accountIdBtn.disabled = false;
+		                countryBtn.disabled = false;
+		                phoneNumBtn.disabled = false;
 		            });
 		        });
 
@@ -320,6 +325,9 @@ Released   : 20140309
 
 					}else if(click_btn_name == 'accountIdBtn'){
 						accountIdInput.value = text;
+
+					}else if(click_btn_name == 'countryBtn'){
+						countryInput.value == text;
 
 					}else if(click_btn_name == 'phoneNumBtn'){
 						phoneNumInput.value = text;
@@ -340,6 +348,9 @@ Released   : 20140309
 
 					}else if(click_btn_name == 'accountIdBtn'){
 						accountIdBtn.disabled = false;
+
+					}else if(click_btn_name == 'countryBtn'){
+						countryBtn.disabled = false;
 
 					}else if(click_btn_name == 'phoneNumBtn'){
 						phoneNumBtn.disabled = false;
