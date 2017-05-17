@@ -10,16 +10,38 @@ from customerDB import getCustomerDB, getUsername2CustomerIdx
 from match_expert import match
 from utils import *
 
+import logging
 import ast
 import random
 import numpy as np
 import json
 import os
 
+LOGGING_LEVEL = logging.DEBUG
+FORMAT = '%(asctime)s - %(name)s - %(funcName)11s - %(levelname)s - %(message)s'
+
+logging.basicConfig(level=LOGGING_LEVEL, format=FORMAT)
+
+werkzeugLogger = logging.getLogger('werkzeug')
+werkzeugLogger.setLevel(logging.ERROR)
+
+logger = logging.getLogger(__name__)
+fileHandler = logging.FileHandler('esunBackend.log')
+fileHandler.setLevel(LOGGING_LEVEL)
+formatter = logging.Formatter(FORMAT)
+fileHandler.setFormatter(formatter)
+logger.addHandler(fileHandler)
+
+# consoleHandler = logging.StreamHandler()
+# consoleHandler.setFormatter(formatter)
+# logger.addHandler(consoleHandler)
+
+
 root_dir = '.'
 data_dir = os.path.join(root_dir, 'data')
 
 def redirectUrl():
+	logger.debug('redirect to the url: ' + request.args['fromUrl'])
 	if request.args['fromUrl'] == 'hotIssue':
 		return '.hotIssue'	
 	elif request.args['fromUrl'] == 'mainPage':
@@ -45,22 +67,21 @@ def like_prod(user_id, prod_id, user_data, user_clusters, prod_data):
 	print ('result : ' + str(user_clusters[user_data[user_id]['cluster_id']]['scores'][prod_clu_id]))
 
 def create_app(configfile=None):
-	# myName = [1]
-	print ('[INFO]:create_app --> loading customer database and mapping')
+	logger.info('Loading user data...')
 	customerDB = getCustomerDB()
 	username2customerID = getUsername2CustomerIdx()
-
 	user_data = readPickle(os.path.join(data_dir, 'user_data.pkl'))
 	user_clusters = readPickle(os.path.join(data_dir, 'user_clusters.pkl'))
-	# prod_data = readPickle(os.path.join(data_dir, 'prod_data.pkl'))
+
+	logger.info('Loading product data...')
 	prod_data = readJson(os.path.join(data_dir, 'new_fund.json'))
 	prod_clusters = readJson(os.path.join(data_dir, 'cluster_centers.json'))
 	
+	logger.info('Loading expert data...')
 	expert_data = readJson(os.path.join(data_dir, 'financial_commissioner.json'))
-	# prod_data = pickle.load('prod_data.pkl')
-	# prod_clusters = pickle.load('prod_clusters.pkl')
-	# customer = [None, None]
-
+	
+	logger.info('Loading finished')
+	
 	app = Flask(__name__, static_url_path='/src/static')
 	
 	app._static_folder = os.path.abspath("src/static/")
@@ -87,7 +108,8 @@ def create_app(configfile=None):
 			password = form.password.data
 			print (password + ' , ' + customerDB[username2customerID[username]][2])
 			if username in username2customerID and password == customerDB[username2customerID[username] - 1][2]:
-				print('[INFO]:login --> username ( ' + form.username.data + ' ) confirmed')
+				# print('[INFO]:login --> username ( ' + form.username.data + ' ) confirmed')
+				logger.info('Username [ ' + username + ' ] login')
 				session['isLogin'] = json.dumps(request.form)
 				# customer = [username, username2customerID[username]]
 
@@ -97,52 +119,25 @@ def create_app(configfile=None):
 
 	@app.route('/')
 	def mainPage():
-		data = {}
-		# user = request.args.get('user')
-		if 'isLogin' not in session:
-			data['isLogin'] = False
-			print('[INFO]:mainPage --> not login')
-			return render_template('index.html', data=data)
-		else:
-			data['isLogin'] = True
-			form = json.loads(session['isLogin'])
-			# print (user)
-			print('[INFO]:mainPage --> login : ', end=' ')
-			print(form)
-			return render_template('index.html', data=data)
+		data = {'isLogin' : True if 'isLogin' in session else False}
+		logger.info('Login status : ' + 'Login' if data['isLogin'] else 'Not login')
+		return render_template('index.html', data=data)
 	
 	@app.route('/hotissue')
 	def hotIssue():
-		data = {}
-		if 'isLogin' not in session:
-			data['isLogin'] = False
-			print('[INFO]:hotIssue --> not login')
-			return render_template('hotissue.html', data=data)
-		else:
-			data['isLogin'] = True
-			# print('[INFO]:hotIssue --> login : ', end=' ')
-			# print(form)			
-			return render_template('hotissue.html', data=data)
+		data = {'isLogin' : True if 'isLogin' in session else False}
+		logger.info('Login status : ' + 'Login' if data['isLogin'] else 'Not login')
+		return render_template('hotissue.html', data=data)
 	
 	@app.route('/logout')
 	def logout():
-		# print(request.args['fromUrl'])
+		logger.info('Username [ ' + json.loads(session['isLogin'])['username'] + ' ] logout')
 		session.pop('isLogin', None)
-		# customer = [None, None]
 		return redirect(url_for(redirectUrl()))
-	
 
-	@app.route('/click')
-	def clickLike():
-		print('XDD')
-		product = [ProductForm(), ProductForm(), ProductForm()]
-		
-		return render_template('rankingList.html', products=product)
-		
-		# pass
-		# print request.args['']
 	@app.route('/productRank')
 	def productRank():
+		logger.info('Login status : ' + 'Login' if 'isLogin' in session else 'Not login')
 		if 'isLogin' not in session:
 			return redirect(url_for('.mainPage'))
 		data = {'isLogin' : True, 'listIdx' : 10}
@@ -185,4 +180,5 @@ def create_app(configfile=None):
 	return app
 
 if __name__ == '__main__':
+	logger.info('Start the server')
 	create_app().run(debug=True)
