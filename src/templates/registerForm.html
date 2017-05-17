@@ -39,7 +39,7 @@ Released   : 20140309
 
 				</div>
 					<div class="col-md-4">
-					<button id="sub_FirstName" name="sub_FirstName" class="btn btn-primary">START</button>
+					<button id="sub_FirstName" name="sub_FirstName" class="btn btn-primary">StartRecord</button>
 				</div>
 			</div>
 
@@ -51,7 +51,7 @@ Released   : 20140309
 
 				</div>
 					<div class="col-md-4">
-					<button id="sub_LastName" name="sub_LastName" class="btn btn-primary">START</button>
+					<button id="sub_LastName" name="sub_LastName" class="btn btn-primary">StartRecord</button>
 				</div>
 			</div>
 
@@ -64,7 +64,7 @@ Released   : 20140309
 
 				</div>
 				<div class="col-md-4">
-					<button id="sub_Email" name="sub_Email" class="btn btn-primary">START</button>
+					<button id="sub_Email" name="sub_Email" class="btn btn-primary">StartRecord</button>
 				</div>
 			</div>
 
@@ -76,7 +76,7 @@ Released   : 20140309
 
 				</div>
 					<div class="col-md-4">
-					<button id="sub_AccountID" name="sub_AccountID" class="btn btn-primary">START</button>
+					<button id="sub_AccountID" name="sub_AccountID" class="btn btn-primary">StartRecord</button>
 				</div>
 			</div>
 
@@ -88,7 +88,7 @@ Released   : 20140309
 				</div>
 				<label class="col-md-4 control-label" for="submit"></label>
 				<div class="col-md-4">
-					<button id="sub_Country" name="sub_Country" class="btn btn-primary">START</button>
+					<button id="sub_Country" name="sub_Country" class="btn btn-primary">StartRecord</button>
 				</div>
 
 			</div>
@@ -102,7 +102,7 @@ Released   : 20140309
 				</div>
 				<label class="col-md-4 control-label" for="submit"></label>
 				<div class="col-md-4">
-					<button id="sub_Phnoe" name="sub_Phnoe" class="btn btn-primary">START</button>
+					<button id="sub_Phnoe" name="sub_Phnoe" class="btn btn-primary">StartRecord</button>
 				</div>
 			</div>
 
@@ -169,7 +169,7 @@ Released   : 20140309
 		                        console.log(JSON.stringify(event.Result)); // check console for other information in result
 		                        break;
 		                    case "SpeechHypothesisEvent" :
-		                        UpdataFirstNameValue(event.Result.Text);
+		                        UpdateInputValue(event.Result.Text);
 		                        console.log(JSON.stringify(event.Result)); // check console for other information in result
 		                        break;
 		                    case "SpeechEndDetectedEvent" :
@@ -207,38 +207,96 @@ Released   : 20140309
 		   	<script>
 		        let startBtn;
 		        let firstNameBtn, lastNameBtn, emailBtn, accountIdBtn, countryBtn, phoneNumBtn;
+		        let click_btn_name;
 		        let key, languageOptions, formatOptions;
 		        let SDK;
 		        let recognizer;
 		        let previousSubscriptionKey;
 
 		        document.addEventListener("DOMContentLoaded", function () {
-		            // startBtn = document.getElementById("startBtn");
-		            firstNameBtn = document.getElementById('sub_FirstName');
-		            firstNameInput = document.getElementById('fn');
 		            key = '63070e40686842699849c4154247acaf';
 		            languageOptions = 'en-US';
 		            formatOptions = 'Simple';
 
-		            // startBtn.addEventListener("click", function () {
-		            //     if (!recognizer || previousSubscriptionKey != key) {
-		            //         previousSubscriptionKey = key;
-		            //         Setup();
-		            //     }
+		            // startBtn = document.getElementById("startBtn");
+		            firstNameBtn = document.getElementById('sub_FirstName');
+		            firstNameInput = document.getElementById('fn');
 
-		            //     RecognizerStart(SDK, recognizer);
-		            //     startBtn.disabled = true;
-		            // });
+		            lastNameBtn = document.getElementById('sub_LastName');
+		            lastNameInput = document.getElementById('ln');
+
+		            emailBtn = document.getElementById('sub_Email');
+		            emailInput = document.getElementById('email');
+
+		            accountIdBtn = document.getElementById('sub_AccountID');
+		            accountIdInput = document.getElementById('add1');
+
+		            countryBtn = document.getElementById('sub_Country');
+		            countryInput = document.getElementById('ctry');
+
+		            phoneNumBtn = document.getElementById('sub_Phnoe');
+		            phoneNumInput = document.getElementById('phone');
 
 		        	firstNameBtn.addEventListener("click", function () {
 		                if (!recognizer || previousSubscriptionKey != key) {
 		                    previousSubscriptionKey = key;
 		                    Setup();
 		                }
-
+		                click_btn_name = 'firstNameBtn';
 		                RecognizerStart(SDK, recognizer);
 		                firstNameBtn.disabled = true;
 		            });
+
+		            lastNameBtn.addEventListener("click", function () {
+		                if (!recognizer || previousSubscriptionKey != key) {
+		                    previousSubscriptionKey = key;
+		                    Setup();
+		                }
+		                click_btn_name = 'lastNameBtn';
+		                RecognizerStart(SDK, recognizer);
+		                lastNameBtn.disabled = true;
+		            });
+
+		            emailBtn.addEventListener("click", function () {
+		                if (!recognizer || previousSubscriptionKey != key) {
+		                    previousSubscriptionKey = key;
+		                    Setup();
+		                }
+		                click_btn_name = 'emailBtn';
+		                RecognizerStart(SDK, recognizer);
+		                emailBtn.disabled = true;
+		            });
+
+		            accountIdBtn.addEventListener("click", function () {
+		                if (!recognizer || previousSubscriptionKey != key) {
+		                    previousSubscriptionKey = key;
+		                    Setup();
+		                }
+		                click_btn_name = 'accountIdBtn';
+		                RecognizerStart(SDK, recognizer);
+		                accountIdBtn.disabled = true;
+		            });
+
+		            countryBtn.addEventListener("click", function () {
+		                if (!recognizer || previousSubscriptionKey != key) {
+		                    previousSubscriptionKey = key;
+		                    Setup();
+		                }
+		                click_btn_name = 'countryBtn';
+		                RecognizerStart(SDK, recognizer);
+		                countryBtn.disabled = true;
+		            });
+
+		            phoneNumBtn.addEventListener("click", function () {
+		                if (!recognizer || previousSubscriptionKey != key) {
+		                    previousSubscriptionKey = key;
+		                    Setup();
+		                }
+		                click_btn_name = 'phoneNumBtn';
+		                RecognizerStart(SDK, recognizer);
+		                phoneNumBtn.disabled = true;
+		            });
+
 
 		            Initialize(function (speechSdk) {
 		                SDK = speechSdk;
@@ -250,13 +308,43 @@ Released   : 20140309
 		        function Setup() {
 		            recognizer = RecognizerSetup(SDK, SDK.RecognitionMode.Interactive, languageOptions, SDK.SpeechResultFormat[formatOptions], key);
 		        }
-		        function UpdataFirstNameValue(text){
-		        	firstNameInput.value = text;
+		        function UpdateInputValue(text){
+		        	if(click_btn_name == 'firstNameBtn'){
+						firstNameInput.value = text;
+
+					}else if(click_btn_name == 'lastNameBtn'){
+						lastNameInput.value = text;
+
+					}else if(click_btn_name == 'emailBtn'){
+						emailInput.value = text;
+
+					}else if(click_btn_name == 'accountIdBtn'){
+						accountIdInput.value = text;
+
+					}else if(click_btn_name == 'phoneNumBtn'){
+						phoneNumInput.value = text;
+
+					}
 		        }
 
 		        function OnComplete() {
 		            // startBtn.disabled = false;
-		            fieldset.disabled = false;
+		            if(click_btn_name == 'firstNameBtn'){
+						firstNameBtn.disabled = false;
+
+					}else if(click_btn_name == 'lastNameBtn'){
+						lastNameBtn.disabled = false;
+
+					}else if(click_btn_name == 'emailBtn'){
+						emailBtn.disabled = false;
+
+					}else if(click_btn_name == 'accountIdBtn'){
+						accountIdBtn.disabled = false;
+
+					}else if(click_btn_name == 'phoneNumBtn'){
+						phoneNumBtn.disabled = false;
+						
+					}
 		        }
 		    </script>
 		</body>
