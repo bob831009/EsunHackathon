@@ -309,6 +309,7 @@ Released   : 20140309
     function UpdateInputValue(text){
     	if(click_btn_name == 'recordBtn'){
 			// firstNameInput.value = text;
+			window.location = "{{ url_for('.navigate', inputText=text) }}";
 			console.log(text);
 		}
     }
