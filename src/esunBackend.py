@@ -52,6 +52,18 @@ def redirectUrl():
 	else:
 		return '.mainPage'	
 
+def updateCustomer(form, customerDB, username2customerID):
+	username2customerID[str(form['username'])] = int(form['add1'])
+	logger.debug(type(form['username']))
+	logger.debug(type(username2customerID[form['username']]))
+	logger.debug(username2customerID[form['username']])
+	customerDB[int(username2customerID[str(form['username'])])][0] = username2customerID[str(form['username'])]
+	customerDB[int(username2customerID[str(form['username'])])][1] = str(form['username'])		
+	customerDB[int(username2customerID[str(form['username'])])][2] = str(form['password'])
+	customerDB[int(username2customerID[str(form['username'])])][3] = str(request.form['username']) + '@gmail.com'	
+	logger.info('Create user [ ' + str(form['username']) + ' ]')
+	return
+
 def create_recommand_list(user_id, user_data, prod_clusters):
 	print (user_id)
 	score_list = user_data[user_id]['scores']
@@ -100,6 +112,11 @@ def create_app(configfile=None):
 	@app.route('/register', methods=('GET', 'POST'))
 	def register():
 		if request.method == 'POST':
+			logger.debug(request.form)
+
+			if str(request.form['username']) in username2customerID:
+				return render_template('registerForm.html', fromUrl=request.args['fromUrl'])
+			updateCustomer(request.form, customerDB, username2customerID)
 			session['isLogin'] = json.dumps(request.form)
 			return redirect(url_for(redirectUrl()))
 		return render_template('registerForm.html', fromUrl=request.args['fromUrl'])
@@ -108,15 +125,15 @@ def create_app(configfile=None):
 	def login():
 		form = LoginForm()
 		if request.method == 'POST' and form.validate_on_submit():
-			username = form.username.data
-			password = form.password.data
-			print (password + ' , ' + customerDB[username2customerID[username]][2])
-			if username in username2customerID and password == customerDB[username2customerID[username] - 1][2]:
+			username = str(form.username.data)
+			password = str(form.password.data)
+			logger.debug(username in username2customerID)
+			if username in username2customerID and password == str(customerDB[int(username2customerID[username])][2]):
+				logger.debug(customerDB[username2customerID[username]])
 				# print('[INFO]:login --> username ( ' + form.username.data + ' ) confirmed')
 				logger.info('Username [ ' + username + ' ] login')
 				session['isLogin'] = json.dumps(request.form)
 				# customer = [username, username2customerID[username]]
-
 			return redirect(url_for(redirectUrl()))
 			
 		return render_template('login.html', form=form)
@@ -156,6 +173,7 @@ def create_app(configfile=None):
 				listIdx = int(request.args['listIdx'])
 				product_dict = ast.literal_eval(request.args['productDict'])
 				like_prod(user_id, product_dict[listIdx]['id'], user_data, user_clusters, prod_data)
+				logger.info(user_data[user_id]['scores'])
 				return render_template('productRank.html', products=product_dict, data=data)
 			elif 'productIdx' in request.args:
 				data['listIdx'] = int(request.args['productIdx'])
