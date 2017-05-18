@@ -24,7 +24,7 @@ def match(financial_commissioners, user_id, user_data, prod_data, prod_clusters)
 	sorted_index = sorted(range(len(score)), key=lambda k: score[k], reverse=True);
 	
 	top5_fc_index = sorted_index[:5];
-	print (top5_fc_index)
+	# print (top5_fc_index)
 	top5_fc_info = {};
 	for index in top5_fc_index:
 		top5_fc_info[index] = financial_commissioners[index].copy();

@@ -310,7 +310,24 @@ Released   : 20140309
     	if(click_btn_name == 'recordBtn'){
 			// firstNameInput.value = text;
 			console.log(text);
-			window.location = "{{ url_for('.navigate', inputText=text) }}";
+			if ((text.indexOf('登入') !== -1) || (text.indexOf('登录') !== -1))
+				window.location = "{{ url_for('.login') }}";
+			else if ((text.indexOf('註冊') !== -1) || (text.indexOf('注册') !== -1))
+				window.location = "{{ url_for('.register') }}";
+			else if ((text.indexOf('登出') !== -1))
+				window.location = "{{ url_for('.logout') }}";
+			else if ((text.indexOf('個人資訊') !== -1) || (text.indexOf('个人资讯') !== -1) || (text.indexOf('個人') !== -1) || (text.indexOf('个人') !== -1))
+				window.location = "{{ url_for('.personalStatus') }}";
+			else if ((text.indexOf('紀錄') !== -1) || (text.indexOf('記錄') !== -1) || (text.indexOf('歷史') !== -1) || (text.indexOf('历史') !== -1) || (text.indexOf('以前') !== -1))
+				window.location = "{{ url_for('.history') }}";
+			else if ((text.indexOf('新聞') !== -1) || (text.indexOf('訊息') !== -1) || (text.indexOf('新闻') !== -1) || (text.indexOf('时事') !== -1))
+				window.location = "{{ url_for('.hotIssue') }}";
+			else if ((text.indexOf('理專') !== -1) || (text.indexOf('專家') !== -1) || (text.indexOf('媒合') !== -1) || (text.indexOf('专家') !== -1))		
+				window.location = "{{ url_for('.expertRank') }}";
+			else if ((text.indexOf('商品') !== -1) || (text.indexOf('組合') !== -1) || (text.indexOf('投資') !== -1))
+				window.location = "{{ url_for('.productRank') }}";
+			else if ((text.indexOf('首頁') !== -1))
+				window.location = "{{ url_for('.mainPage') }}";
 		}
     }
 
