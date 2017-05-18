@@ -11,34 +11,37 @@ from match_expert import match
 from utils import *
 
 import logging
+from logging.handlers import RotatingFileHandler
 import ast
 import random
 import numpy as np
 import json
 import os
 
-LOGGING_LEVEL = logging.DEBUG
-FORMAT = '%(asctime)s - %(name)s - %(funcName)11s - %(levelname)s - %(message)s'
+root_dir = '.'
+data_dir = os.path.join(root_dir, 'data')
+log_dir = os.path.join(root_dir, 'log')
 
-logging.basicConfig(level=LOGGING_LEVEL, format=FORMAT)
+LOGGING_LEVEL = logging.DEBUG
+LOGGING_FORMAT = '%(asctime)s - %(name)s - %(funcName)11s - %(levelname)s - %(message)s'
+LOGGING_MAXBYTES = 10000
+LOGGING_BACKUPCOUNT = 5
+
+logging.basicConfig(level=LOGGING_LEVEL, format=LOGGING_FORMAT)
 
 werkzeugLogger = logging.getLogger('werkzeug')
 werkzeugLogger.setLevel(logging.ERROR)
 
 logger = logging.getLogger(__name__)
-fileHandler = logging.FileHandler('esunBackend.log')
+fileHandler = RotatingFileHandler(os.path.join(log_dir, 'esunBackend.log') , maxBytes=LOGGING_MAXBYTES, backupCount=LOGGING_BACKUPCOUNT)
 fileHandler.setLevel(LOGGING_LEVEL)
-formatter = logging.Formatter(FORMAT)
+formatter = logging.Formatter(LOGGING_FORMAT)
 fileHandler.setFormatter(formatter)
 logger.addHandler(fileHandler)
 
 # consoleHandler = logging.StreamHandler()
 # consoleHandler.setFormatter(formatter)
 # logger.addHandler(consoleHandler)
-
-
-root_dir = '.'
-data_dir = os.path.join(root_dir, 'data')
 
 def redirectUrl():
 	logger.debug('redirect to the url: ' + request.args['fromUrl'])
@@ -68,8 +71,9 @@ def like_prod(user_id, prod_id, user_data, user_clusters, prod_data):
 
 def create_app(configfile=None):
 	logger.info('Loading user data...')
-	customerDB = getCustomerDB()
-	username2customerID = getUsername2CustomerIdx()
+	
+	customerDB = readPickle(os.path.join(data_dir, 'customerDB.pkl'))
+	username2customerID = readPickle(os.path.join(data_dir, 'username2customerID.pkl'))
 	user_data = readPickle(os.path.join(data_dir, 'user_data.pkl'))
 	user_clusters = readPickle(os.path.join(data_dir, 'user_clusters.pkl'))
 
@@ -145,6 +149,7 @@ def create_app(configfile=None):
 			user_id = int(json.loads(session['isLogin'])['customer_id'])
 		else:
 			user_id = username2customerID[json.loads(session['isLogin'])['username']]
+		
 		if 'isRefresh' in request.args and request.args['isRefresh'] == 'no':
 			if 'listIdx' in request.args:
 				print ('idx ====== ' + str(int(request.args['listIdx'])))
@@ -160,9 +165,7 @@ def create_app(configfile=None):
 		prod_list = create_recommand_list(user_id, user_data, prod_clusters)
 		product_dict = {}
 		for idx in range(10):
-			# print (prod_data[prod_list[idx]])
 			product_dict[idx] = prod_data[prod_list[idx]]
-		# print (product_dict)
 		return render_template('productRank.html', products=product_dict, data=data)
 	@app.route('/expertRank')
 	def expertRank():
@@ -173,9 +176,7 @@ def create_app(configfile=None):
 			user_id = int(json.loads(session['isLogin'])['customer_id'])
 		else:
 			user_id = username2customerID[json.loads(session['isLogin'])['username']]
-		print (user_id)
 		expert_dict = match(expert_data, user_id, user_data, prod_data, prod_clusters)
-		print (expert_dict)
 		return render_template('expertRank.html', experts=expert_dict, data=data)
 	return app
 

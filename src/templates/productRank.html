@@ -71,7 +71,7 @@ Released   : 20140309
 			<h2>Praesent scelerisquet</h2>
 			<span class="byline">Donec leo, vivamus fermentum nibh in augue praesent a lacus at urna congue</span> </div>
 		<div class="container" style="float: left; width: 45%; margin-left: 5%;">    
-		    <button type="button" onclick="window.location='{{ url_for('.productRank', isRefresh='yes', productDict=products) }}';">Refresh</button>
+		    <button type="button" class="btn btn-primary" onclick="window.location='{{ url_for('.productRank', isRefresh='yes', productDict=products) }}';">Refresh</button>
 		    <div class="list-group">
 		    {% for key, product in products.iteritems() %}
 		    	<div class='list-group-item'>
@@ -88,7 +88,7 @@ Released   : 20140309
 		          			<h3> 報酬率 : {{ product['報酬率3個月'] }} </h3>
 		          		</div>
 		          		<div class="form-check col-md-2">
-		            		<button type="button" onclick=onclick="window.location='{{ url_for('.productRank', isRefresh='no', productDict=products, listIdx=key) }}';">Like</button>
+		            		<button type="button" class="btn btn-primary" onclick="window.location='{{ url_for('.productRank', isRefresh='no', productDict=products, listIdx=key) }}';">Like</button>
 		          		</div>
 
 		          		<!-- <button type="submit" class="btn btn-primary">Submit</button> -->
