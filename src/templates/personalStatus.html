@@ -48,7 +48,7 @@ Released   : 20140309
 			<ul>
 				<li class="current_page_item"><a href="{{ url_for('.mainPage') }}" accesskey="1" title="">Homepage</a></li>
 				{% if data['isLogin'] %}
-				<li><a href="#" accesskey="2" title="">Pesonal Status</a></li>
+				<li><a href="{{ url_for('.personalStatus') }}" accesskey="2" title="">Pesonal Status</a></li>
 				{% else %}
 				<li><a href="{{ url_for('.register', fromUrl='mainPage') }}" accesskey="2" title="">Sign up</a></li>
 				{% endif %}

@@ -50,11 +50,13 @@ Released   : 20140309
 			<ul>
 				<li class="current_page_item"><a href="{{ url_for('.mainPage') }}" accesskey="1" title="">Homepage</a></li>
 				{% if data['isLogin'] %}
-				<li><a href="#" accesskey="2" title="">Pesonal Status</a></li>
+				<li><a href="{{ url_for('.personalStatus') }}" accesskey="2" title="">Pesonal Status</a></li>
 				{% else %}
 				<li><a href="{{ url_for('.register', fromUrl='mainPage') }}" accesskey="2" title="">Sign up</a></li>
 				{% endif %}
+				{% if data['isLogin'] %}
 				<li><a href="#" accesskey="3" title="">Investment History</a></li>
+				{% endif %}
 				<li><a href="#about-us" accesskey="4" title="">About Us</a></li>
 				{% if data['isLogin'] %}
 				<li><a href="{{ url_for('.logout', fromUrl='mainPage') }}" accesskey="5" title="">Sign out</a></li>
