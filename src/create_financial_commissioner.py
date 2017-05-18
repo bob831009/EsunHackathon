@@ -19,8 +19,10 @@ for i in range(COMMISSIONER_NUM):
 	commissioner_info['top5'] = tmp_top5;
 	commissioner_info['id'] = i;
 	commissioner_info['name'] = total_name[i];
-	commissioner_info['profile_path'] = '../data/financial_commissioner_image/%d.jpg'%(i);
+	commissioner_info['profile_path'] = 'financial_commissioner_image/%d.jpg'%(i);
 	commissioner_info['seniority'] = 5;
+	commissioner_info['email'] = '%s@gmail.com' % (total_name[i]);
+	commissioner_info['cellphone'] = '09' + str(random.randint(10000000,99999999));
 	res.append(commissioner_info);
 
 with open(output_fileName, 'w') as f:
