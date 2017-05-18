@@ -326,7 +326,7 @@ Released   : 20140309
 				window.location = "{{ url_for('.expertRank') }}";
 			else if ((text.indexOf('商品') !== -1) || (text.indexOf('組合') !== -1) || (text.indexOf('投資') !== -1))
 				window.location = "{{ url_for('.productRank') }}";
-			else if ((text.indexOf('首頁') !== -1))
+			else if ((text.indexOf('首頁') !== -1) || (text.indexOf('首页') !== -1))
 				window.location = "{{ url_for('.mainPage') }}";
 		}
     }
