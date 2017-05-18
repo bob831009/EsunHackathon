@@ -48,18 +48,18 @@ Released   : 20140309
 		</div>
 		<div id="menu">	
 			<ul>
-				<li class="current_page_item"><a href="{{ url_for('.mainPage', isRefresh='yes') }}" accesskey="1" title="">Homepage</a></li>
+				<li class="current_page_item"><a href="{{ url_for('.mainPage') }}" accesskey="1" title="">Homepage</a></li>
 				{% if data['isLogin'] %}
 				<li><a href="#" accesskey="2" title="">Personnel Status</a></li>
 				{% else %}
-				<li><a href="{{ url_for('.register', fromUrl='mainPage', isRefresh='yes') }}" accesskey="2" title="">Sign up</a></li>
+				<li><a href="{{ url_for('.register', fromUrl='mainPage') }}" accesskey="2" title="">Sign up</a></li>
 				{% endif %}
-				<li><a href="#" accesskey="3" title="">About Us</a></li>
-				<li><a href="#" accesskey="4" title="">Careers</a></li>
+				<li><a href="#" accesskey="3" title="">Investment History</a></li>
+				<li><a href="#about-us" accesskey="4" title="">About Us</a></li>
 				{% if data['isLogin'] %}
-				<li><a href="{{ url_for('.logout', fromUrl='mainPage', isRefresh='yes') }}" accesskey="5" title="">Sign out</a></li>
+				<li><a href="{{ url_for('.logout', fromUrl='mainPage') }}" accesskey="5" title="">Sign out</a></li>
 				{% else %}
-				<li><a href="{{ url_for('.login', fromUrl='mainPage', isRefresh='yes') }}" accesskey="5" title="">Sign in</a></li>
+				<li><a href="{{ url_for('.login', fromUrl='mainPage') }}" accesskey="5" title="">Sign in</a></li>
 				{% endif %}
 			</ul>
 		</div>
