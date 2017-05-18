@@ -179,9 +179,147 @@ Released   : 20140309
 	        </div>
 	    </div>
 	</div>
-
 </div>
 
+<!-- The SDK has a dependency on requirejs (http://requirejs.org/). -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js"></script>
+<!-- SDK REFERENCE -->
+<script src="{{ url_for('static', filename='js/speech.browser.sdk.js') }}"></script>
+
+<!-- SDK USAGE -->
+<script>
+	// On doument load resolve the SDK dependecy
+	function Initialize(onComplete) {
+		require(["Speech.Browser.Sdk"], function(SDK) {
+		    onComplete(SDK);
+		});
+	}
+		        
+	// Setup the recongizer
+	function RecognizerSetup(SDK, recognitionMode, language, format, subscriptionKey) {
+		let recognizerConfig = new SDK.RecognizerConfig(
+		    new SDK.SpeechConfig(
+		        new SDK.Context(
+		            new SDK.OS(navigator.userAgent, "Browser", null),
+		            new SDK.Device("SpeechSample", "SpeechSample", "1.0.00000"))),
+		    recognitionMode, // SDK.RecognitionMode.Interactive  (Options - Interactive/Conversation/Dictation>)
+		    language, // Supported laguages are specific to each recognition mode. Refer to docs.
+		    format); // SDK.SpeechResultFormat.Simple (Options - Simple/Detailed)
+
+		// Alternatively use SDK.CognitiveTokenAuthentication(fetchCallback, fetchOnExpiryCallback) for token auth
+		let authentication = new SDK.CognitiveSubscriptionKeyAuthentication(subscriptionKey);
+
+		return SDK.CreateRecognizer(recognizerConfig, authentication);
+	}
+
+	// Start the recognition
+	function RecognizerStart(SDK, recognizer) {
+		recognizer.Recognize((event) => {
+		    /*
+		     Alternative syntax for typescript devs.
+		     if (event instanceof SDK.RecognitionTriggeredEvent)
+		    */
+		    switch (event.Name) {
+		        case "RecognitionTriggeredEvent" :
+	                console.log('Initializing');
+		            break;
+		        case "ListeningStartedEvent" :
+		            console.log('Listening');
+		            break;
+		        case "RecognitionStartedEvent" :
+		            console.log('Listening_Recognizing');
+		            break;
+		        case "SpeechStartDetectedEvent" :
+		            console.log('Listening_DetectedSpeech_Recognizing');
+		            console.log(JSON.stringify(event.Result)); // check console for other information in result
+		            break;
+                case "SpeechHypothesisEvent" :
+                    UpdateInputValue(event.Result.Text);
+                    console.log(JSON.stringify(event.Result)); // check console for other information in result
+                    break;
+                case "SpeechEndDetectedEvent" :
+                    // OnSpeechEndDetected();
+                    console.log('Processing_Adding_Final_Touches');
+                    console.log(JSON.stringify(event.Result)); // check console for other information in result
+                    break;
+                case "SpeechSimplePhraseEvent" :
+                    break;
+                case "SpeechDetailedPhraseEvent" :
+                    break;
+                case "RecognitionEndedEvent" :
+                    OnComplete();
+                    console.log('Idle');
+                    console.log(JSON.stringify(event)); // Debug information
+                    break;
+            }
+        })
+        .On(() => {
+            // The request succeeded. Nothing to do here.
+        },
+        (error) => {
+            console.error(error);
+        });
+    }
+
+    // Stop the Recognition.
+    function RecognizerStop(SDK, recognizer) {
+        // recognizer.AudioSource.Detach(audioNodeId) can be also used here. (audioNodeId is part of ListeningStartedEvent)
+        recognizer.AudioSource.TurnOff();
+    }
+</script>
+
+<!-- Browser Hooks -->
+<script>
+    let recordBtn;
+    let firstNameBtn, lastNameBtn, emailBtn, accountIdBtn, countryBtn, phoneNumBtn;
+    let click_btn_name;
+    let key, languageOptions, formatOptions;
+    let SDK;
+    let recognizer;
+    let previousSubscriptionKey;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        key = '63070e40686842699849c4154247acaf';
+        languageOptions = 'zh-CN';
+        formatOptions = 'Simple';
+
+        recordBtn = document.getElementById("startBtn");
+
+
+    	recordBtn.addEventListener("click", function () {
+            if (!recognizer || previousSubscriptionKey != key) {
+                previousSubscriptionKey = key;
+                Setup();
+            }
+            click_btn_name = 'recordBtn';
+            RecognizerStart(SDK, recognizer);
+            recordBtn.disabled = true;
+        });
+
+        Initialize(function (speechSdk) {
+            SDK = speechSdk;
+            // startBtn.disabled = false;
+            recordBtn.disabled = false;
+        });
+    });
+
+    function Setup() {
+        recognizer = RecognizerSetup(SDK, SDK.RecognitionMode.Interactive, languageOptions, SDK.SpeechResultFormat[formatOptions], key);
+    }
+    function UpdateInputValue(text){
+    	if(click_btn_name == 'recordBtn'){
+			// firstNameInput.value = text;
+			console.log(text);
+		}
+    }
+
+    function OnComplete() {
+        // startBtn.disabled = false;
+        if(click_btn_name == 'recordBtn'){
+			recordBtn.disabled = false;
+		}
+    }
+</script>
 
 
 <div id="copyright" class="container">
