@@ -27,7 +27,7 @@ root_dir = '.'
 data_dir = os.path.join(root_dir, 'data')
 log_dir = os.path.join(root_dir, 'log')
 
-LOGGING_LEVEL = logging.DEBUG
+LOGGING_LEVEL = logging.INFO
 LOGGING_FORMAT = '%(asctime)s - %(name)s - %(funcName)11s - %(levelname)s - %(message)s'
 LOGGING_MAXBYTES = 10000
 LOGGING_BACKUPCOUNT = 5
@@ -100,9 +100,6 @@ def redirectUrl():
 		return '.mainPage'	
 
 def updateCustomer(form, customerDB, username2customerID):
-	logger.debug(type(form['username']))
-	logger.debug(type(username2customerID[form['username']]))
-	logger.debug(username2customerID[form['username']])
 	username2customerID[str(form['username'])] = int(form['add1'])
 	customerDB[int(username2customerID[str(form['username'])])][0] = username2customerID[str(form['username'])]
 	customerDB[int(username2customerID[str(form['username'])])][1] = str(form['username'])		
