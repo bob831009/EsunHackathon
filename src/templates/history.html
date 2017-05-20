@@ -74,6 +74,22 @@ Released   : 20140309
 			<h2>Investment History</h2>
 			<span class="byline">Investment Item List</span> </div>
 		<div class="container">    
+			<div class="form-inline row">
+				<div class="col-md-3">
+					<center> 基金名稱 </center>
+				</div>
+				<div class="col-md-3">
+					<center> 開始時間 </center>
+				</div>
+					
+				<div class="col-md-3">
+					<center> 結束時間 </center>
+				</div>
+					
+				<div class="col-md-3">
+					<center> 投資利潤 </center>
+				</div>
+			</div>
 		    <div class="list-group">
 		    {% for key, product in products.iteritems() %}
 		    	<div class='list-group-item'>
@@ -88,7 +104,7 @@ Released   : 20140309
 		        			<center> {{ product['end'] }} </center>
 		        		</div>
 		        		<div class="col-md-3">
-		        			<center> Revenue : {{ product['revenue'] }} % </center>
+		        			<center> {{ product['revenue'] }} % </center>
 		        		</div>
 		        	</div>
 		      	</div>
