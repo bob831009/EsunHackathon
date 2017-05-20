@@ -1,0 +1,10 @@
+login		登入 
+register	註冊
+logout		登出
+personalStatus	個人資訊 個人
+history		紀錄 歷史 以前
+hotIssue	新聞 訊息 時事
+expertRank	專家 媒合
+productRank	商品 組合 投資
+mainPage	首頁
+
