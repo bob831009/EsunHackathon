@@ -17,25 +17,28 @@ Released   : 20140309
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
 	<link href="http://fonts.googleapis.com/css?family=Varela" rel="stylesheet" />
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 	
 	<!-- <link href="bootstrap.css" rel="stylesheet" type="text/css" media="all" -->
 	<link rel="stylesheet" type="text/css"  href={{ url_for('static', filename='stylesheet/bootstrap.css') }}>
 	<!-- <link href="bootstrap.css" rel="stylesheet" type="text/css" media="all" -->
 	<link rel="stylesheet" type="text/css"  href={{ url_for('static', filename='stylesheet/style.css') }}>
-
-
 	<!-- <link href="default.css" rel="stylesheet" type="text/css" media="all" />
 	<link href="fonts.css" rel="stylesheet" type="text/css" media="all" /> -->
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheet/default.css') }}" media="all">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheet/fonts.css') }}" media="all">
-	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!--[if IE 6]><link href="default_ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
-
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script src="http://code.highcharts.com/highcharts.js"></script>
-	<script src="{{ url_for('static', filename='js/chartkick.js') }}"></script>
-
+	<style>
+		img {
+			width: 80px;
+			height: 80px;
+		}
+		h2 {
+			margin-bottom: 5px;
+		}
+	</style>
 </head>
 <body>
 <div id="wrapper">
@@ -48,14 +51,14 @@ Released   : 20140309
 			<ul>
 				<li class="current_page_item"><a href="{{ url_for('.mainPage') }}" accesskey="1" title="">Homepage</a></li>
 				{% if data['isLogin'] %}
-				<li><a href="{{ url_for('.personalStatus') }}" accesskey="2" title="">Pesonal Status</a></li>
+				<li><a href="{{ url_for('.personalStatus') }}" accesskey="2" title="">Personnel Status</a></li>
 				{% else %}
 				<li><a href="{{ url_for('.register', fromUrl='mainPage') }}" accesskey="2" title="">Sign up</a></li>
 				{% endif %}
 				{% if data['isLogin'] %}
-				<li><a href="{{ url_for('.history') }}" accesskey="3" title="">Investment Item</a></li>
+				<li><a href="{{ url_for('.history') }}" accesskey="3" title="">Investment History</a></li>
 				{% endif %}
-				<li><a href="#contact" accesskey="4" title="">About Us</a></li>
+				<li><a href="#about-us" accesskey="4" title="">About Us</a></li>
 				{% if data['isLogin'] %}
 				<li><a href="{{ url_for('.logout', fromUrl='mainPage') }}" accesskey="5" title="">Sign out</a></li>
 				{% else %}
@@ -66,21 +69,37 @@ Released   : 20140309
 	</div>
 	</div>
 	
-	<div id="extra" class="container">
+	<div id="extra" class="container" style="border-style: solid; width: 100%;">
 		<div class="title">
-			<h2>Your recent financial condition</h2>
+			<h2>FINANCIAL CONSULTANT MATCHING LIST</h2>
+			<span class="byline">Just connect the consultant immediately</span> </div>
+		<div class="container">    
+		    <div class="list-group">
+		    {% for key, product in products.iteritems() %}
+		    	<div class='list-group-item'>
+		        	<div class="form-inline row">
+		        		<div class="col-md-3">
+		        			<center> {{ product['基金名稱'] }} </center>
+		        		</div>
+		        		<div class="col-md-3">
+		        			<center> {{ product['from'] }} </center>
+		        		</div>
+		        		<div class="col-md-3">
+		        			<center> {{ product['end'] }} </center>
+		        		</div>
+		        		<div class="col-md-3">
+		        			<center> Revenue : {{ product['revenue'] }} % </center>
+		        		</div>
+		        	</div>
+		      	</div>
+		    {% endfor %}
+		    </div>
 		</div>
-			<!-- Services Section -->
-			{% line_chart  [['Jan 1', 45249], ['Feb 1', 41249], ['Mar 1', 37249] , ['Apr 1', 30249] , ['May 1', 80249] ] %}		
-
 	</div>
-
 </div>
 
-
-
 <div id="copyright" class="container">
-	<p>&copy; ND. All rights reserved. | Photos by <a href="http://fotogrph.com/">Fotogrph</a> | Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
+	<p>&copy; Untitled. All rights reserved. | Photos by <a href="http://fotogrph.com/">Fotogrph</a> | Design by <a href="http://templated.co" rel="nofollow">TEMPLATED</a>.</p>
 </div>
 </body>
 </html>

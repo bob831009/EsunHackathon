@@ -21,6 +21,7 @@ import random
 import numpy as np
 import json
 import os
+import time
 
 root_dir = '.'
 data_dir = os.path.join(root_dir, 'data')
@@ -46,6 +47,26 @@ logger.addHandler(fileHandler)
 # consoleHandler = logging.StreamHandler()
 # consoleHandler.setFormatter(formatter)
 # logger.addHandler(consoleHandler)
+
+def strTimeProp(start, end, format, prop):
+    """Get a time at a proportion of a range of two formatted times.
+
+    start and end should be strings specifying times formated in the
+    given format (strftime-style), giving an interval [start, end].
+    prop specifies how a proportion of the interval to be taken after
+    start.  The returned time will be in the specified format.
+    """
+
+    stime = time.mktime(time.strptime(start, format))
+    etime = time.mktime(time.strptime(end, format))
+
+    ptime = stime + prop * (etime - stime)
+
+    return time.strftime(format, time.localtime(ptime))
+
+
+def randomDate(start, end, prop):
+    return strTimeProp(start, end, '%m/%d/%Y', prop)
 
 
 def getClusterDist(prod_clusters):
@@ -173,7 +194,27 @@ def create_app(configfile=None):
 	
 	@app.route('/history')
 	def history():
-		return render_template('')
+		if 'isLogin' not in session:
+			return redirect(url_for('.mainPage'))
+		data = {'isLogin' : True, 'listIdx' : 10}
+		if json.loads(session['isLogin'])['username'] not in username2customerID:
+			user_id = int(json.loads(session['isLogin'])['customer_id'])
+		else:
+			user_id = username2customerID[json.loads(session['isLogin'])['username']]
+		logger.info('Username : ' + json.loads(session['isLogin'])['username'] + ' , ID : ' + str(user_id))
+		prod_list = create_recommand_list(user_id, user_data, prod_clusters)[:5]
+		logger.info('Generate history product ID:')
+		logger.info(prod_list)
+		product_dict = {}
+		for idx in range(5):
+			fromData = randomDate(str(idx + 1) + '/1/200' + str(idx + 1), str(idx + 3) + '/1/200' + str(idx + 1), random.random())
+			toData = randomDate(str(idx + 3) + '/1/200' + str(idx + 1), str(idx + 7) + '/1/200' + str(idx + 1), random.random())
+			product_dict[idx] = prod_data[prod_list[idx]]
+			product_dict[idx]['from'] = fromData
+			product_dict[idx]['end'] = toData
+			product_dict[idx]['revenue'] = float((random.randint(0, 400) - 200)) / 10 
+			
+		return render_template('history.html', data=data, products=product_dict)
 
 	@app.route('/')
 	def mainPage():

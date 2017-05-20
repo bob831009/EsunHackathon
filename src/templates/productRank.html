@@ -55,7 +55,7 @@ Released   : 20140309
 				<li><a href="{{ url_for('.register', fromUrl='mainPage') }}" accesskey="2" title="">Sign up</a></li>
 				{% endif %}
 				{% if data['isLogin'] %}
-				<li><a href="#" accesskey="3" title="">Investment History</a></li>
+				<li><a href="{{ url_for('.history') }}" accesskey="3" title="">Investment History</a></li>
 				{% endif %}
 				<li><a href="#about-us" accesskey="4" title="">About Us</a></li>
 				{% if data['isLogin'] %}
