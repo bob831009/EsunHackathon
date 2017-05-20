@@ -313,11 +313,11 @@ Released   : 20140309
 			// firstNameInput.value = text;
 			console.log(text);
 			if ((text.indexOf('登入') !== -1) || (text.indexOf('登录') !== -1))
-				window.location = "{{ url_for('.login') }}";
+				window.location = "{{ url_for('.login', fromUrl='mainPage') }}";
 			else if ((text.indexOf('註冊') !== -1) || (text.indexOf('注册') !== -1))
-				window.location = "{{ url_for('.register') }}";
+				window.location = "{{ url_for('.register', fromUrl='mainPage') }}";
 			else if ((text.indexOf('登出') !== -1))
-				window.location = "{{ url_for('.logout') }}";
+				window.location = "{{ url_for('.logout', fromUrl='mainPage') }}";
 			else if ((text.indexOf('個人資訊') !== -1) || (text.indexOf('个人资讯') !== -1) || (text.indexOf('個人') !== -1) || (text.indexOf('个人') !== -1))
 				window.location = "{{ url_for('.personalStatus') }}";
 			else if ((text.indexOf('紀錄') !== -1) || (text.indexOf('記錄') !== -1) || (text.indexOf('歷史') !== -1) || (text.indexOf('历史') !== -1) || (text.indexOf('以前') !== -1))
